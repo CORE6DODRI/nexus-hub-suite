@@ -1,0 +1,548 @@
+import { SuperAdminGate } from "@/components/layout/SuperAdminGate";
+import { useState } from "react";
+import { createFileRoute } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
+import { Building2, KeyRound, Pencil, Power, UserPlus } from "lucide-react";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { PageHeader } from "@/components/common/PageHeader";
+import { StatusBadge } from "@/components/common/StatusBadge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useModules, useRoles, useUsers, logActivity } from "@/hooks/useCore";
+import { useAuth } from "@/hooks/useAuth";
+import { createUser, editUser } from "@/lib/users.functions";
+import { useCompany } from "@/hooks/useCompany";
+
+export const Route = createFileRoute("/_authenticated/administration/users")({
+  head: () => ({
+    meta: [
+      { title: "Users — DODRI Platform Core" },
+      { name: "description", content: "Manage platform accounts, roles and access status." },
+      { property: "og:title", content: "Users — DODRI Platform Core" },
+      { property: "og:description", content: "Manage platform accounts and access." },
+    ],
+  }),
+  component: () => (
+    <SuperAdminGate>
+      <UsersPage />
+    </SuperAdminGate>
+  ),
+});
+
+function UsersPage() {
+  const { can, user, profile } = useAuth();
+  const users = useUsers();
+  const company = useCompany();
+  const roles = useRoles();
+  const modules = useModules();
+  const qc = useQueryClient();
+  const [open, setOpen] = useState(false);
+  const [form, setForm] = useState({ first: "", last: "", email: "", password: "", accessType: "interne" as "super_admin" | "interne" | "externe", moduleIds: [] as string[], companyId: "" });
+  const [editOpen, setEditOpen] = useState(false);
+  const [editForm, setEditForm] = useState({ id: "", first: "", last: "", email: "", password: "", accessType: "interne" as "super_admin" | "interne" | "externe", moduleIds: [] as string[], companyId: "" });
+
+  async function openEdit(u: (typeof rows)[number]) {
+    const { data: access } = await supabase
+      .from("user_module_access")
+      .select("module_id")
+      .eq("user_id", u.id);
+    setEditForm({
+      id: u.id,
+      first: u.first_name ?? "",
+      last: u.last_name ?? "",
+      email: u.email ?? "",
+      password: "",
+      accessType: (u.access_type as "super_admin" | "interne" | "externe") ?? "interne",
+      moduleIds: (access ?? []).map((a) => a.module_id),
+      companyId: u.company_id ?? "",
+    });
+    setEditOpen(true);
+  }
+
+  async function saveEdit() {
+    try {
+      await editUser({
+        data: {
+          userId: editForm.id,
+          email: editForm.email,
+          password: editForm.password || undefined,
+          firstName: editForm.first || undefined,
+          lastName: editForm.last || undefined,
+          accessType: editForm.accessType,
+          moduleIds: editForm.moduleIds,
+          companyId: editForm.companyId || null,
+        },
+      });
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "User update failed.");
+      return;
+    }
+    toast.success("User updated. No email was sent.");
+    setEditOpen(false);
+    qc.invalidateQueries({ queryKey: ["users"] });
+    qc.invalidateQueries({ queryKey: ["activity_logs"] });
+  }
+
+  const rows = users.data ?? [];
+  const canEdit = can("users.edit");
+
+  async function createAccount() {
+    if (!user) return;
+    try {
+      await createUser({
+        data: {
+          email: form.email,
+          password: form.password,
+          firstName: form.first || undefined,
+          lastName: form.last || undefined,
+          accessType: form.accessType,
+          moduleIds: form.moduleIds,
+          companyId: form.companyId,
+        },
+      });
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "User creation failed.");
+      return;
+    }
+    toast.success("User created and linked to the company. No email was sent.");
+    setOpen(false);
+    setForm({ first: "", last: "", email: "", password: "", accessType: "interne" as "super_admin" | "interne" | "externe", moduleIds: [] as string[], companyId: "" });
+    qc.invalidateQueries({ queryKey: ["users"] });
+    qc.invalidateQueries({ queryKey: ["activity_logs"] });
+  }
+
+  async function toggleStatus(id: string, status: string) {
+    const nextStatus = status === "active" ? "inactive" : "active";
+    const { error } = await supabase.from("profiles").update({ status: nextStatus }).eq("id", id);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    if (user) {
+      await logActivity({
+        userId: user.id,
+        actor: profile?.email ?? null,
+        action: "user.updated",
+        entityType: "user",
+        entityId: id,
+        description: `Account marked ${nextStatus}`,
+      });
+    }
+    qc.invalidateQueries({ queryKey: ["users"] });
+  }
+
+  async function setRole(userId: string, roleId: string) {
+    await supabase.from("user_roles").delete().eq("user_id", userId);
+    const { error } = await supabase.from("user_roles").insert({ user_id: userId, role_id: roleId });
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    if (user) {
+      await logActivity({
+        userId: user.id,
+        actor: profile?.email ?? null,
+        action: "role.updated",
+        entityType: "user",
+        entityId: userId,
+        description: "Role assignment changed",
+      });
+    }
+    toast.success("Role updated.");
+    qc.invalidateQueries({ queryKey: ["users"] });
+  }
+
+  async function linkToCompany(id: string) {
+    const companyId = company.data?.id;
+    if (!companyId) {
+      toast.error("Create the company first in Parameters → Company & Subscription.");
+      return;
+    }
+    const { error } = await supabase.from("profiles").update({ company_id: companyId }).eq("id", id);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    if (user) {
+      await logActivity({
+        userId: user.id,
+        actor: profile?.email ?? null,
+        action: "user.updated",
+        entityType: "user",
+        entityId: id,
+        description: `Linked to ${company.data?.name ?? "company"}`,
+      });
+    }
+    toast.success("Account linked to the company.");
+    qc.invalidateQueries({ queryKey: ["users"] });
+  }
+
+  async function sendReset(email: string | null) {
+    if (!email) return;
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    if (error) toast.error(error.message);
+    else toast.success("Password reset email sent.");
+  }
+
+  return (
+    <div>
+      <PageHeader
+        eyebrow="Administration"
+        title="Users"
+        description={`All accounts belong to ${company.data?.name ?? "this Core installation"}. You set each password manually — no emails are sent.`}
+        actions={
+          can("users.create") ? (
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger asChild>
+                <Button>
+                  <UserPlus className="mr-2 h-4 w-4" /> Create user
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Create user</DialogTitle>
+                  <DialogDescription>
+                    You set the password here. No email is sent — share the credentials with the person yourself.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-3">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1.5">
+                      <Label>First name</Label>
+                      <Input value={form.first} onChange={(e) => setForm({ ...form, first: e.target.value })} />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label>Last name</Label>
+                      <Input value={form.last} onChange={(e) => setForm({ ...form, last: e.target.value })} />
+                    </div>
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label>Email</Label>
+                    <Input
+                      type="email"
+                      value={form.email}
+                      onChange={(e) => setForm({ ...form, email: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label>Password</Label>
+                    <Input
+                      type="password"
+                      value={form.password}
+                      onChange={(e) => setForm({ ...form, password: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label>Company</Label>
+                    <Select value={form.companyId} onValueChange={(v) => setForm({ ...form, companyId: v })}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select company" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {company.data && (
+                          <SelectItem value={company.data.id}>{company.data.name}</SelectItem>
+                        )}
+                      </SelectContent>
+                    </Select>
+                    <p className="text-xs text-muted-foreground">
+                      The company's subscription applies to this user automatically.
+                    </p>
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label>Permission</Label>
+                    <Select
+                      value={form.accessType}
+                      onValueChange={(v) => setForm({ ...form, accessType: v as typeof form.accessType, moduleIds: [] })}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="super_admin">Super Administrateur — sees everything</SelectItem>
+                        <SelectItem value="interne">Permission Interne — selected modules</SelectItem>
+                        <SelectItem value="externe">Permission Externe — modules inside SaaS</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  {form.accessType !== "super_admin" && (() => {
+                    const all = modules.data ?? [];
+                    const saas = all.find((m) => m.slug === "saas");
+                    const list = form.accessType === "externe"
+                      ? all.filter((m) => saas && (m as { parent_id?: string | null }).parent_id === saas.id)
+                      : all.filter((m) => m.slug !== "saas" && !(m as { parent_id?: string | null }).parent_id);
+                    return (
+                      <div className="space-y-1.5">
+                        <Label>Modules</Label>
+                        <div className="max-h-40 space-y-1 overflow-y-auto rounded-md border border-border p-2">
+                          {list.length === 0 && (
+                            <p className="text-xs text-muted-foreground">
+                              {form.accessType === "externe" ? "No modules inside SaaS yet." : "No modules available."}
+                            </p>
+                          )}
+                          {list.map((m) => (
+                            <label key={m.id} className="flex items-center gap-2 text-sm">
+                              <input
+                                type="checkbox"
+                                checked={form.moduleIds.includes(m.id)}
+                                onChange={(e) =>
+                                  setForm({
+                                    ...form,
+                                    moduleIds: e.target.checked
+                                      ? [...form.moduleIds, m.id]
+                                      : form.moduleIds.filter((x) => x !== m.id),
+                                  })
+                                }
+                              />
+                              {m.name}
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })()}
+                </div>
+                <DialogFooter>
+                  <Button onClick={createAccount} disabled={!form.email || !form.password || !form.companyId}>
+                    Create user
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          ) : null
+        }
+      />
+
+      <div className="mb-4 grid grid-cols-3 gap-3">
+        {[
+          { label: "Total", value: rows.length },
+          { label: "Active", value: rows.filter((r) => r.status === "active").length },
+          { label: "Inactive", value: rows.filter((r) => r.status !== "active").length },
+        ].map((s) => (
+          <div key={s.label} className="panel p-4">
+            <div className="label-tech">{s.label}</div>
+            <div className="mt-1 font-display text-2xl font-bold">{s.value}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="panel overflow-x-auto p-1">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Company</TableHead>
+              <TableHead>Role</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Last login</TableHead>
+              <TableHead>Created</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {rows.map((u) => (
+              <TableRow key={u.id}>
+                <TableCell className="font-medium">
+                  {[u.first_name, u.last_name].filter(Boolean).join(" ") || "—"}
+                </TableCell>
+                <TableCell className="text-muted-foreground">{u.email}</TableCell>
+<TableCell className="text-muted-foreground">
+                  {u.company_id ? (company.data?.name ?? "—") : "Not linked"}
+                </TableCell>
+                <TableCell>
+                  {canEdit ? (
+                    <Select value={u.role_id ?? ""} onValueChange={(v) => setRole(u.id, v)}>
+                      <SelectTrigger className="h-8 w-[150px]">
+                        <SelectValue placeholder={u.role} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {(roles.data ?? []).map((r) => (
+                          <SelectItem key={r.id} value={r.id}>
+                            {r.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  ) : (
+                    u.role
+                  )}
+                </TableCell>
+                <TableCell>
+                  <StatusBadge label={u.status} />
+                </TableCell>
+                <TableCell className="text-muted-foreground">
+                  {u.last_login_at ? new Date(u.last_login_at).toLocaleString() : "—"}
+                </TableCell>
+                <TableCell className="text-muted-foreground">
+                  {new Date(u.created_at).toLocaleDateString()}
+                </TableCell>
+                <TableCell className="text-right">
+                  <div className="flex justify-end gap-1">
+                    {canEdit && (
+                      <Button variant="ghost" size="sm" title="Edit user" onClick={() => openEdit(u)}>
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                    )}
+                    {canEdit && !u.company_id && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        title="Link to company"
+                        onClick={() => linkToCompany(u.id)}
+                      >
+                        <Building2 className="h-4 w-4" />
+                      </Button>
+                    )}
+                    <Button variant="ghost" size="sm" title="Send password reset email" onClick={() => sendReset(u.email)}>
+                      <KeyRound className="h-4 w-4" />
+                    </Button>
+                    {canEdit && (
+                      <Button variant="ghost" size="sm" title="Activate / deactivate" onClick={() => toggleStatus(u.id, u.status)}>
+                        <Power className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+            {rows.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={8} className="py-8 text-center text-sm text-muted-foreground">
+                  No accounts visible with your permissions.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+
+      <Dialog open={editOpen} onOpenChange={setEditOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit user</DialogTitle>
+            <DialogDescription>
+              Changes apply immediately. Leave the password empty to keep the current one. No email is sent.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-3">
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label>First name</Label>
+                <Input value={editForm.first} onChange={(e) => setEditForm({ ...editForm, first: e.target.value })} />
+              </div>
+              <div className="space-y-1.5">
+                <Label>Last name</Label>
+                <Input value={editForm.last} onChange={(e) => setEditForm({ ...editForm, last: e.target.value })} />
+              </div>
+            </div>
+            <div className="space-y-1.5">
+              <Label>Email</Label>
+              <Input
+                type="email"
+                value={editForm.email}
+                onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label>New password (optional)</Label>
+              <Input
+                type="password"
+                value={editForm.password}
+                onChange={(e) => setEditForm({ ...editForm, password: e.target.value })}
+                placeholder="Leave empty to keep current password"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label>Company</Label>
+              <Select value={editForm.companyId} onValueChange={(v) => setEditForm({ ...editForm, companyId: v })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select company" />
+                </SelectTrigger>
+                <SelectContent>
+                  {company.data && (
+                    <SelectItem value={company.data.id}>{company.data.name}</SelectItem>
+                  )}
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground">
+                The company's subscription applies to this user automatically.
+              </p>
+            </div>
+            <div className="space-y-1.5">
+              <Label>Permission</Label>
+              <Select
+                value={editForm.accessType}
+                onValueChange={(v) => setEditForm({ ...editForm, accessType: v as typeof editForm.accessType, moduleIds: [] })}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="super_admin">Super Administrateur — sees everything</SelectItem>
+                  <SelectItem value="interne">Permission Interne — selected modules</SelectItem>
+                  <SelectItem value="externe">Permission Externe — modules inside SaaS</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            {editForm.accessType !== "super_admin" && (() => {
+              const all = modules.data ?? [];
+              const saas = all.find((m) => m.slug === "saas");
+              const list = editForm.accessType === "externe"
+                ? all.filter((m) => saas && (m as { parent_id?: string | null }).parent_id === saas.id)
+                : all.filter((m) => m.slug !== "saas" && !(m as { parent_id?: string | null }).parent_id);
+              return (
+                <div className="space-y-1.5">
+                  <Label>Modules</Label>
+                  <div className="max-h-40 space-y-1 overflow-y-auto rounded-md border border-border p-2">
+                    {list.length === 0 && (
+                      <p className="text-xs text-muted-foreground">
+                        {editForm.accessType === "externe" ? "No modules inside SaaS yet." : "No modules available."}
+                      </p>
+                    )}
+                    {list.map((m) => (
+                      <label key={m.id} className="flex items-center gap-2 text-sm">
+                        <input
+                          type="checkbox"
+                          checked={editForm.moduleIds.includes(m.id)}
+                          onChange={(e) =>
+                            setEditForm({
+                              ...editForm,
+                              moduleIds: e.target.checked
+                                ? [...editForm.moduleIds, m.id]
+                                : editForm.moduleIds.filter((x) => x !== m.id),
+                            })
+                          }
+                        />
+                        {m.name}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
+          </div>
+          <DialogFooter>
+            <Button onClick={saveEdit} disabled={!editForm.email}>
+              Save changes
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}

@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1790472942460,
+      "tag": "0000_dodri_core_schema",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790473051321,
+      "tag": "0001_dodri_role_access_and_profile_fields",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790473116926,
+      "tag": "0002_dodri_company_logo_access",
+      "breakpoints": true
+    }
+  ]
+}
