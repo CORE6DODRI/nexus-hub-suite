@@ -52,7 +52,7 @@ export function DataTable({
 }: {
   columns: string[];
   rows: ReactNode[][];
-  empty?: string;
+  empty?: string | undefined;
 }) {
   return (
     <div className="overflow-x-auto rounded-md border border-border/80">
