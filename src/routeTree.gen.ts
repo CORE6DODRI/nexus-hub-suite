@@ -17,6 +17,8 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedSecurityRouteImport } from './routes/_authenticated/security'
 import { Route as CmsIndexRouteImport } from './routes/cms/index'
+import { Route as CmsSlugRouteImport } from './routes/cms/$slug'
+import { Route as CmsContactRouteImport } from './routes/cms/contact'
 import { Route as AuthenticatedAdministrationActivityLogsRouteImport } from './routes/_authenticated/administration/activity-logs'
 import { Route as AuthenticatedAdministrationPermissionsRouteImport } from './routes/_authenticated/administration/permissions'
 import { Route as AuthenticatedAdministrationRolesRouteImport } from './routes/_authenticated/administration/roles'
@@ -66,6 +68,16 @@ const AuthenticatedSecurityRoute = AuthenticatedSecurityRouteImport.update({
 const CmsIndexRoute = CmsIndexRouteImport.update({
   id: '/cms/',
   path: '/cms/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CmsSlugRoute = CmsSlugRouteImport.update({
+  id: '/cms/$slug',
+  path: '/cms/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CmsContactRoute = CmsContactRouteImport.update({
+  id: '/cms/contact',
+  path: '/cms/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedAdministrationActivityLogsRoute =
@@ -142,6 +154,8 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/security': typeof AuthenticatedSecurityRoute
+  '/cms/$slug': typeof CmsSlugRoute
+  '/cms/contact': typeof CmsContactRoute
   '/cms/': typeof CmsIndexRoute
   '/administration/activity-logs': typeof AuthenticatedAdministrationActivityLogsRoute
   '/administration/permissions': typeof AuthenticatedAdministrationPermissionsRoute
@@ -162,6 +176,8 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/security': typeof AuthenticatedSecurityRoute
+  '/cms/$slug': typeof CmsSlugRoute
+  '/cms/contact': typeof CmsContactRoute
   '/cms': typeof CmsIndexRoute
   '/administration/activity-logs': typeof AuthenticatedAdministrationActivityLogsRoute
   '/administration/permissions': typeof AuthenticatedAdministrationPermissionsRoute
@@ -184,6 +200,8 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/security': typeof AuthenticatedSecurityRoute
+  '/cms/$slug': typeof CmsSlugRoute
+  '/cms/contact': typeof CmsContactRoute
   '/cms/': typeof CmsIndexRoute
   '/_authenticated/administration/activity-logs': typeof AuthenticatedAdministrationActivityLogsRoute
   '/_authenticated/administration/permissions': typeof AuthenticatedAdministrationPermissionsRoute
@@ -206,6 +224,8 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/profile'
     | '/security'
+    | '/cms/$slug'
+    | '/cms/contact'
     | '/cms/'
     | '/administration/activity-logs'
     | '/administration/permissions'
@@ -226,6 +246,8 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/profile'
     | '/security'
+    | '/cms/$slug'
+    | '/cms/contact'
     | '/cms'
     | '/administration/activity-logs'
     | '/administration/permissions'
@@ -247,6 +269,8 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/profile'
     | '/_authenticated/security'
+    | '/cms/$slug'
+    | '/cms/contact'
     | '/cms/'
     | '/_authenticated/administration/activity-logs'
     | '/_authenticated/administration/permissions'
@@ -266,6 +290,8 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   LoginRoute: typeof LoginRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  CmsSlugRoute: typeof CmsSlugRoute
+  CmsContactRoute: typeof CmsContactRoute
   CmsIndexRoute: typeof CmsIndexRoute
 }
 
@@ -325,6 +351,20 @@ declare module '@tanstack/react-router' {
       path: '/cms'
       fullPath: '/cms/'
       preLoaderRoute: typeof CmsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cms/$slug': {
+      id: '/cms/$slug'
+      path: '/cms/$slug'
+      fullPath: '/cms/$slug'
+      preLoaderRoute: typeof CmsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cms/contact': {
+      id: '/cms/contact'
+      path: '/cms/contact'
+      fullPath: '/cms/contact'
+      preLoaderRoute: typeof CmsContactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/administration/activity-logs': {
@@ -452,6 +492,8 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   LoginRoute: LoginRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  CmsSlugRoute: CmsSlugRoute,
+  CmsContactRoute: CmsContactRoute,
   CmsIndexRoute: CmsIndexRoute,
 }
 export const routeTree = rootRouteImport
