@@ -239,6 +239,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          access_type: string
           company_id: string | null
           created_at: string
           email: string | null
@@ -250,6 +251,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          access_type?: string
           company_id?: string | null
           created_at?: string
           email?: string | null
@@ -261,6 +263,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          access_type?: string
           company_id?: string | null
           created_at?: string
           email?: string | null
@@ -541,6 +544,7 @@ export type Database = {
         Args: { _code: string; _user_id: string }
         Returns: boolean
       }
+      has_role: { Args: { _role: string; _user_id: string }; Returns: boolean }
       has_role_slug: {
         Args: { _slug: string; _user_id: string }
         Returns: boolean
