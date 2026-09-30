@@ -63,7 +63,7 @@ export default function MessageModuleUI({ name, version }: ModuleUIProps) {
         <div className="space-y-3">
           <div className="section-title">Demandes entrantes</div>
           <DataTable
-            columns=Sender", "Sujet", "Message", "Source", "Statut", "Reçu", ""]}
+            columns={["Expéditeur", "Sujet", "Message", "Source", "Statut", "Reçu", ""]}
             empty="Aucune demande. Le formulaire du site web alimente cette liste."
             rows={items.map((item) => [
               <div key="who">
