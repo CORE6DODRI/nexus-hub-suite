@@ -18,7 +18,7 @@ export type FieldSpec = {
   name: string;
   label: string;
   type?: "text" | "number" | "date" | "textarea" | "select" | "checkbox";
-  options?: string[];
+  options?: (string | { value: string; label: string })[];
   required?: boolean;
   placeholder?: string;
   defaultValue?: string | number | boolean;
@@ -45,6 +45,7 @@ export function CrudPanel<T extends Row>({
   empty,
   extraDefaults,
   toolbar,
+  filter,
 }: {
   table: string;
   title: string;
@@ -55,6 +56,7 @@ export function CrudPanel<T extends Row>({
   empty?: string;
   extraDefaults?: Record<string, unknown>;
   toolbar?: ReactNode;
+  filter?: (row: T) => boolean;
 }) {
   const rows = useRows<T>(table, { orderBy: orderBy ?? "created_at", ascending });
   const save = useSaveRow(table);
@@ -87,7 +89,7 @@ export function CrudPanel<T extends Row>({
     fields.forEach((f) => {
       const value = payload[f.name];
       if (f.type === "number") payload[f.name] = value === "" || value === null ? 0 : Number(value);
-      if ((f.type === "date" || f.type === "text" || f.type === "textarea") && value === "") {
+      if ((f.type === "date" || f.type === "text" || f.type === "textarea" || f.type === "select" || !f.type) && value === "") {
         payload[f.name] = f.required ? "" : null;
       }
     });
@@ -109,7 +111,7 @@ export function CrudPanel<T extends Row>({
       <DataTable
         columns={[...columns.map((c) => c.header), ""]}
         empty={empty}
-        rows={(rows.data ?? []).map((row) => [
+        rows={(rows.data ?? []).filter((row) => (filter ? filter(row) : true)).map((row) => [
           ...columns.map((c) => c.render(row)),
           <div key="actions" className="flex justify-end gap-1">
             <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => openEdit(row)}>
@@ -154,11 +156,14 @@ export function CrudPanel<T extends Row>({
                     onChange={(event) => setDraft((d) => ({ ...d, [field.name]: event.target.value }))}
                   >
                     <option value="">—</option>
-                    {(field.options ?? []).map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
+                    {(field.options ?? []).map((option) => {
+                      const o = typeof option === "string" ? { value: option, label: option } : option;
+                      return (
+                        <option key={o.value} value={o.value}>
+                          {o.label}
+                        </option>
+                      );
+                    })}
                   </select>
                 ) : field.type === "checkbox" ? (
                   <input
