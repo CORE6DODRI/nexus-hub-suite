@@ -142,6 +142,60 @@ export type Database = {
           },
         ]
       }
+      com_catalog: {
+        Row: {
+          created_at: string
+          designation: string
+          famille: string | null
+          id: string
+          prix: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          designation: string
+          famille?: string | null
+          id?: string
+          prix?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          designation?: string
+          famille?: string | null
+          id?: string
+          prix?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      com_inventory: {
+        Row: {
+          created_at: string
+          designation: string
+          famille: string | null
+          id: string
+          quantite: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          designation: string
+          famille?: string | null
+          id?: string
+          quantite?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          designation?: string
+          famille?: string | null
+          id?: string
+          quantite?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       company: {
         Row: {
           created_at: string
@@ -320,6 +374,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      crm_products: {
+        Row: {
+          created_at: string
+          id: string
+          prix: number
+          produit: string
+          quantite: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          prix?: number
+          produit: string
+          quantite?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          prix?: number
+          produit?: string
+          quantite?: number
+          updated_at?: string
+        }
+        Relationships: []
       }
       fin_accounts: {
         Row: {
@@ -591,6 +672,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      module_field_mappings: {
+        Row: {
+          cond_source_column: string | null
+          cond_target_column: string | null
+          created_at: string
+          enabled: boolean
+          id: string
+          source_column: string
+          source_module: string
+          source_table: string
+          target_column: string
+          target_module: string
+          target_table: string
+          updated_at: string
+        }
+        Insert: {
+          cond_source_column?: string | null
+          cond_target_column?: string | null
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          source_column: string
+          source_module: string
+          source_table: string
+          target_column: string
+          target_module: string
+          target_table: string
+          updated_at?: string
+        }
+        Update: {
+          cond_source_column?: string | null
+          cond_target_column?: string | null
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          source_column?: string
+          source_module?: string
+          source_table?: string
+          target_column?: string
+          target_module?: string
+          target_table?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       module_permissions: {
         Row: {
