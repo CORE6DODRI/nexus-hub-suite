@@ -23,15 +23,15 @@ const loaders = import.meta.glob("./*/index.tsx") as Record<
 >;
 
 const bySlug = new Map<string, () => Promise<{ default: ComponentType<ModuleUIProps> }>>(
-  Object.entries(loaders).map(([path, loader]) => [path.split("/")[1] ?? "", loader]),
+  Object.entries(loaders).map(([path, loader]) => [(path.split("/")[1] ?? "").toLowerCase(), loader]),
 );
 
 export function hasModuleUI(slug: string) {
-  return bySlug.has(slug);
+  return bySlug.has(slug.toLowerCase());
 }
 
 export function getModuleUI(slug: string) {
-  const loader = bySlug.get(slug);
+  const loader = bySlug.get(slug.toLowerCase());
   return loader ? lazy(loader) : null;
 }
 
