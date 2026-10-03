@@ -4,6 +4,7 @@ import { StatusBadge } from "@/components/common/StatusBadge";
 import { moduleIcon } from "@/lib/dodri/icons";
 import { useConnections, useModules } from "@/hooks/useCore";
 import { Button } from "@/components/ui/button";
+import { ModuleHost } from "@/components/core/ModuleHost";
 
 export const Route = createFileRoute("/_authenticated/modules/$slug")({
   head: () => ({
@@ -71,9 +72,8 @@ function ModulePage() {
         </div>
       </div>
 
-      <div className="panel mt-4 p-5 text-sm text-muted-foreground">
-        The Core exposes this module through navigation, permissions and the connection layer. Its
-        business features are delivered by the module itself once it ships.
+      <div className="mt-4">
+        <ModuleHost module={module} />
       </div>
     </div>
   );
