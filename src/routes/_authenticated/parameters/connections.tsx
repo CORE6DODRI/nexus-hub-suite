@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { PageHeader } from "@/components/common/PageHeader";
 import { StatusBadge } from "@/components/common/StatusBadge";
 import { ConnectionGraph } from "@/components/core/ConnectionGraph";
+import { FieldMappings } from "@/components/core/FieldMappings";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -209,6 +210,8 @@ function ConnectionsPage() {
       />
 
       <ConnectionGraph modules={moduleRows} connections={connections.data ?? []} />
+
+      <FieldMappings canEdit={can("connections.create")} />
 
       <div className="panel mt-4 overflow-x-auto p-1">
         <Table>
