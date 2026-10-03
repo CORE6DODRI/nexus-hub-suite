@@ -1,5 +1,10 @@
 import { useMemo, useState } from "react";
-import { ChevronLeft, ChevronRight, Handshake, Search, Target, TrendingUp, Users } from "lucide-react";
+import { ChevronLeft, ChevronRight, Handshake, RefreshCw, Search, Target, TrendingUp, Users } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useFieldMappings } from "@/components/core/FieldMappings";
+import { resolveMapping } from "@/lib/modules/schema";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ModuleHeader, Pill, StatGrid } from "@/components/modules/ModuleKit";
@@ -11,7 +16,7 @@ type Contact = { id: string; full_name: string; company_name: string | null; ema
 type Deal = { id: string; title: string; contact_id: string | null; amount: number; currency: string; stage: string; probability: number; expected_close: string | null; created_at: string };
 type Activity = { id: string; subject: string; type: string; contact_id: string | null; deal_id: string | null; due_at: string | null; done: boolean; created_at: string };
 
-const TABS = ["Pipeline", "Contacts", "Affaires", "Activités"] as const;
+const TABS = ["Pipeline", "Contacts", "Affaires", "Activités", "Produits"] as const;
 const STAGES = ["new", "qualified", "proposal", "negotiation", "won", "lost"];
 const STAGE_PROBA: Record<string, number> = { new: 10, qualified: 30, proposal: 50, negotiation: 75, won: 100, lost: 0 };
 
@@ -163,7 +168,44 @@ export default function CrmModuleUI({ name, version }: ModuleUIProps) {
           ]}
         />
       ) : null}
+
+      {tab === "Produits" ? <Products /> : null}
     </div>
+  );
+}
+
+type Product = { id: string; produit: string; quantite: number; prix: number };
+
+function Products() {
+  const qc = useQueryClient();
+  const mappings = useFieldMappings();
+  const [busy, setBusy] = useState(false);
+  async function sync() {
+    setBusy(true);
+    try {
+      const rows = await resolveMapping("crm_products", mappings.data ?? []);
+      if (!rows.length) return toast.info("Aucune liaison active pour CRM.PRODUITS (Parameters → Connections).");
+      await supabase.from("crm_products" as never).delete().not("id", "is", null);
+      const { error } = await supabase.from("crm_products" as never).insert(
+        rows.map((r) => ({ produit: String(r.produit ?? ""), quantite: Number(r.quantite ?? 0), prix: Number(r.prix ?? 0) })) as never,
+      );
+      if (error) throw error;
+      toast.success(`${rows.length} produit(s) synchronisé(s)`);
+      qc.invalidateQueries({ queryKey: ["mod", "crm_products"] });
+    } catch (e) {
+      toast.error((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
+  return (
+    <CrudPanel<Product>
+      table="crm_products"
+      title="Produits"
+      toolbar={<Button size="sm" variant="outline" disabled={busy} onClick={sync}><RefreshCw className="mr-1 h-3.5 w-3.5" /> Synchroniser via liaisons</Button>}
+      fields={[{ name: "produit", label: "Produit", required: true }, { name: "quantite", label: "Quantité", type: "number", defaultValue: 0 }, { name: "prix", label: "Prix", type: "number", defaultValue: 0 }]}
+      columns={[{ header: "Produit", render: (r) => r.produit }, { header: "Quantité", render: (r) => r.quantite }, { header: "Prix", render: (r) => money(r.prix) }]}
+    />
   );
 }
 
