@@ -184,10 +184,10 @@ function Products() {
     setBusy(true);
     try {
       const rows = await resolveMapping("crm_products", mappings.data ?? []);
-      if (!rows.length) return toast.info("Aucune liaison active pour CRM.PRODUITS (Parameters → Connections).");
+      if (!rows.length) { toast.info("Aucune liaison active pour CRM.PRODUITS (Parameters → Connections)."); return; }
       await supabase.from("crm_products" as never).delete().not("id", "is", null);
       const { error } = await supabase.from("crm_products" as never).insert(
-        rows.map((r) => ({ produit: String(r.produit ?? ""), quantite: Number(r.quantite ?? 0), prix: Number(r.prix ?? 0) })) as never,
+        rows.map((r) => ({ produit: String(r["produit"] ?? ""), quantite: Number(r["quantite"] ?? 0), prix: Number(r["prix"] ?? 0) })) as never,
       );
       if (error) throw error;
       toast.success(`${rows.length} produit(s) synchronisé(s)`);

@@ -45,7 +45,7 @@ export function FieldMappings({ canEdit }: { canEdit: boolean }) {
         cond_target_column: cond[0], cond_source_column: cond[1],
       };
       const { error } = await supabase.from("module_field_mappings" as never).upsert(payload as never, { onConflict: "target_table,target_column" });
-      if (error) return toast.error(error.message);
+      if (error) { toast.error(error.message); return; }
       await ensureConnection(src.module, tSec!.module.slug);
     }
     qc.invalidateQueries({ queryKey: ["module_field_mappings"] });
@@ -165,7 +165,7 @@ function Catalogue() {
 
 function ArrowDiagram({ mappings }: { mappings: FieldMapping[] }) {
   const box = useRef<HTMLDivElement>(null);
-  const [lines, setLines] = useState<{ x1: number; y1: number; x2: number; y2: number; label?: string }[]>([]);
+  const [lines, setLines] = useState<{ x1: number; y1: number; x2: number; y2: number; label?: string | undefined }[]>([]);
   const sources = useMemo(() => Array.from(new Set(mappings.map((m) => `${m.source_table}|${m.source_column}`))), [mappings]);
   useLayoutEffect(() => {
     const root = box.current;
@@ -182,7 +182,7 @@ function ArrowDiagram({ mappings }: { mappings: FieldMapping[] }) {
   return (
     <div ref={box} className="relative flex justify-between gap-24 rounded-md border border-border/70 p-4">
       <div className="space-y-2">
-        {sources.map((k) => { const [t, c] = k.split("|"); return <div key={k} data-s={k} className="rounded border border-border bg-muted px-2 py-1 font-mono text-[11px]">{fieldPath(t, c)}</div>; })}
+        {sources.map((k) => { const [t = "", c = ""] = k.split("|"); return <div key={k} data-s={k} className="rounded border border-border bg-muted px-2 py-1 font-mono text-[11px]">{fieldPath(t, c)}</div>; })}
       </div>
       <div className="space-y-2">
         {mappings.map((m) => <div key={m.id} data-t={m.target_column} className="rounded border border-primary/60 bg-primary/10 px-2 py-1 font-mono text-[11px]">{fieldPath(m.target_table, m.target_column)}</div>)}
