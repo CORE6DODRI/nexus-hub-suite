@@ -210,13 +210,13 @@ export function CinematicHero() {
               </p>
               <div className="mt-10 flex flex-wrap items-center gap-4">
                 <Link
-                  to="/site/services"
+                  to="/services"
                   className="btn-gradient inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold"
                 >
                   <Txt page="accueil" k="hero.cta1" /> <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
-                  to="/site/contact"
+                  to="/contact"
                   className="btn-ghost-glow inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold"
                 >
                   <Txt page="accueil" k="hero.cta2" />
@@ -283,13 +283,13 @@ export function CinematicHero() {
 
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
               <Link
-                to="/site/a-propos"
+                to="/a-propos"
                 className="btn-gradient inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold"
               >
                 Notre histoire <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
-                to="/site/services"
+                to="/services"
                 className="btn-ghost-glow inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold"
               >
                 Explorer nos services

@@ -41,7 +41,7 @@ function SiteHome() {
             Créez une page avec le slug « home » dans le module WEBSITE CMS pour afficher cette page d'accueil.
           </p>
           <Link
-            to="/login"
+            to="/backdoor"
             className="mt-5 inline-flex rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
           >
             Espace de gestion

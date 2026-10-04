@@ -7,7 +7,7 @@ export const Route = createFileRoute("/_authenticated")({
   ssr: false,
   beforeLoad: async ({ location }) => {
     const { data, error } = await supabase.auth.getUser();
-    if (error || !data.user) throw redirect({ to: "/login" });
+    if (error || !data.user) throw redirect({ to: "/backdoor" });
     // Master admin: full access, no company/subscription required.
     if (isMasterAdmin(data.user.email)) return { user: data.user };
     // Company + subscription gate (super admin is always allowed).
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/_authenticated")({
         JSON.stringify({ reason: a?.reason ?? "unknown", end_date: a?.end_date }),
       );
       await supabase.auth.signOut();
-      throw redirect({ to: "/login" });
+      throw redirect({ to: "/backdoor" });
     }
     if (/^\/(administration|parameters|security)/.test(location.pathname)) {
       const { data: isSa } = await supabase.rpc("has_role_slug", { _user_id: data.user.id, _slug: "super-admin" });

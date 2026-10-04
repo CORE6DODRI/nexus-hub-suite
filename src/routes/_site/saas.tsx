@@ -4,7 +4,7 @@ import { SiteLayout, PageHeader } from "@website/components/site/SiteLayout";
 import { useT, Txt, useCmsImage } from "@website/lib/site-text-context";
 import heroSaas from "@website/assets/hero-saas.jpg";
 
-export const Route = createFileRoute("/site/saas")({
+export const Route = createFileRoute("/_site/saas")({
   component: SaasPage,
   head: () => ({
     meta: [
@@ -80,7 +80,7 @@ function SaasPage() {
                   </li>
                 ))}
               </ul>
-              <Link to="/site/contact" className="btn-gradient mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold">
+              <Link to="/contact" className="btn-gradient mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold">
                 <Txt page="saas" k="plans.cta" /> <ArrowRight className="h-4 w-4" />
               </Link>
             </div>

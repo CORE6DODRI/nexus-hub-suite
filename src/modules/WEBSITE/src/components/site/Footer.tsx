@@ -33,12 +33,12 @@ export function Footer() {
             <ul className="space-y-2 text-sm text-white/70">
               {(
                 [
-                  ["/site", "Accueil"],
-                  ["/site/a-propos", "À propos"],
-                  ["/site/services", "Services"],
-                  ["/site/realisations", "Réalisations"],
-                  ["/site/saas", "SaaS"],
-                  ["/site/blog", "Blog"],
+                  ["/", "Accueil"],
+                  ["/a-propos", "À propos"],
+                  ["/services", "Services"],
+                  ["/realisations", "Réalisations"],
+                  ["/saas", "SaaS"],
+                  ["/blog", "Blog"],
                 ] as const
               ).map(([to, label]) => (
                 <li key={to}>
@@ -56,7 +56,7 @@ export function Footer() {
               {["Domotique", "Digital", "Réseaux", "IA", "COM", "Events"].map(
                 (s) => (
                   <li key={s}>
-                    <Link to="/site/services" className="transition hover:text-white">
+                    <Link to="/services" className="transition hover:text-white">
                       {s}
                     </Link>
                   </li>

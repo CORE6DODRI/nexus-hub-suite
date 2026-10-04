@@ -9,7 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { DodriLogo } from "@/components/brand/DodriLogo";
 import { useAuth, isMasterAdmin } from "@/hooks/useAuth";
 
-export const Route = createFileRoute("/login")({
+export const Route = createFileRoute("/backdoor")({
   ssr: false,
   head: () => ({
     meta: [

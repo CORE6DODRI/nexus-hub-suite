@@ -5,7 +5,7 @@ import { SiteLayout, PageHeader } from "@website/components/site/SiteLayout";
 import { useT, Txt, useCmsImage } from "@website/lib/site-text-context";
 import heroContact from "@website/assets/hero-contact.jpg";
 
-export const Route = createFileRoute("/site/contact")({
+export const Route = createFileRoute("/_site/contact")({
   component: ContactPage,
   head: () => ({
     meta: [

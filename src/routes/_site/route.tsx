@@ -5,7 +5,7 @@ import { SiteTextProvider } from "@website/lib/site-text-context";
 import { CartProvider } from "@website/lib/cart";
 
 /** FRONT OFFICE: the WEBSITE module (src/modules/WEBSITE) served at /site. */
-export const Route = createFileRoute("/site")({
+export const Route = createFileRoute("/_site")({
   head: () => ({
     meta: [
       { title: "DODRICOM — Entrez dans le siège de l'innovation" },

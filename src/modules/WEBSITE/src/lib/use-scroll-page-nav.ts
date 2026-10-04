@@ -2,12 +2,12 @@ import { useEffect, useRef } from "react";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
 
 export const PAGE_ORDER = [
-  "/site",
-  "/site/a-propos",
-  "/site/services",
-  "/site/realisations",
-  "/site/blog",
-  "/site/contact",
+  "/",
+  "/a-propos",
+  "/services",
+  "/realisations",
+  "/blog",
+  "/contact",
 ] as const;
 
 /**

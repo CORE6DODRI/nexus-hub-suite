@@ -16,7 +16,7 @@ export const TEXT_PAGES: TextPage[] = [
   {
     slug: "accueil",
     name: "Accueil",
-    route: "/site",
+    route: "/",
     fields: [
       { key: "hero.eyebrow", label: "Hero — sur-titre", def: "Bienvenue chez DODRICOM" },
       { key: "hero.title1", label: "Hero — titre ligne 1", def: "L'innovation" },
@@ -80,7 +80,7 @@ export const TEXT_PAGES: TextPage[] = [
   {
     slug: "a-propos",
     name: "À propos",
-    route: "/site/a-propos",
+    route: "/a-propos",
     fields: [
       { key: "hero.eyebrow", label: "Sur-titre", def: "À propos de DODRICOM" },
       { key: "hero.title1", label: "Titre ligne 1", def: "Présentation" },
@@ -132,7 +132,7 @@ export const TEXT_PAGES: TextPage[] = [
   {
     slug: "services",
     name: "Services",
-    route: "/site/services",
+    route: "/services",
     fields: [
       { key: "hero.eyebrow", label: "Sur-titre", def: "Nos services" },
       { key: "products.title", label: "Produits — sur-titre", def: "Les produits" },
@@ -154,7 +154,7 @@ export const TEXT_PAGES: TextPage[] = [
   {
     slug: "realisations",
     name: "Réalisations",
-    route: "/site/realisations",
+    route: "/realisations",
     fields: [
       { key: "hero.eyebrow", label: "Sur-titre", def: "Nos réalisations" },
       { key: "hero.title1", label: "Titre", def: "RÉALISATIONS" },
@@ -180,7 +180,7 @@ export const TEXT_PAGES: TextPage[] = [
   {
     slug: "saas",
     name: "SaaS",
-    route: "/site/saas",
+    route: "/saas",
     fields: [
       { key: "hero.eyebrow", label: "Sur-titre", def: "Solutions SaaS" },
       { key: "hero.title1", label: "Titre", def: "Vos outils métiers" },
@@ -199,7 +199,7 @@ export const TEXT_PAGES: TextPage[] = [
   {
     slug: "blog",
     name: "Blog",
-    route: "/site/blog",
+    route: "/blog",
     fields: [
       { key: "hero.eyebrow", label: "Sur-titre", def: "Blog" },
       { key: "hero.title1", label: "Titre", def: "Actualités &" },
@@ -218,7 +218,7 @@ export const TEXT_PAGES: TextPage[] = [
   {
     slug: "contact",
     name: "Contact",
-    route: "/site/contact",
+    route: "/contact",
     fields: [
       { key: "hero.eyebrow", label: "Sur-titre", def: "Contact" },
       { key: "hero.title1", label: "Titre", def: "Parlons de votre" },
