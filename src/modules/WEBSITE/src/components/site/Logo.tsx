@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 export function Logo({ className = "" }: { className?: string }) {
   return (
     <Link
-      to="/site"
+      to="/"
       className={`group flex shrink-0 items-center gap-2.5 ${className}`}
       aria-label="DODRICOM — Accueil"
     >
