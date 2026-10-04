@@ -13,7 +13,7 @@ const projectsQuery = queryOptions({
   queryFn: () => getProjects(),
 });
 
-export const Route = createFileRoute("/site/realisations")({
+export const Route = createFileRoute("/_site/realisations")({
   loader: ({ context }) => {
     void context.queryClient.ensureQueryData(projectsQuery);
   },
@@ -120,7 +120,7 @@ function RealisationsPage() {
             <h3 className="text-2xl font-black text-white sm:text-3xl"><Txt page="realisations" k="cta.title" /></h3>
             <p className="mt-2 text-white/70"><Txt page="realisations" k="cta.body" /></p>
           </div>
-          <Link to="/site/contact" className="btn-gradient inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold">
+          <Link to="/contact" className="btn-gradient inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold">
             <Txt page="realisations" k="cta.button" /> <ArrowRight className="h-4 w-4" />
           </Link>
         </div>

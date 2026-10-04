@@ -12,7 +12,7 @@ const postsQuery = queryOptions({
   queryFn: () => getBlogPosts(),
 });
 
-export const Route = createFileRoute("/site/blog")({
+export const Route = createFileRoute("/_site/blog")({
   loader: ({ context }) => {
     void context.queryClient.ensureQueryData(postsQuery);
   },

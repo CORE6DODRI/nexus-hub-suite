@@ -49,7 +49,7 @@ export function AppHeader() {
     await queryClient.cancelQueries();
     queryClient.clear();
     await signOut();
-    navigate({ to: "/login", replace: true });
+    navigate({ to: "/backdoor", replace: true });
   }
 
   return (

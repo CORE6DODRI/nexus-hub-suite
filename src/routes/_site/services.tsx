@@ -30,7 +30,7 @@ const servicesQuery = queryOptions({
   queryFn: () => getServicesContent(),
 });
 
-export const Route = createFileRoute("/site/services")({
+export const Route = createFileRoute("/_site/services")({
   loader: ({ context }) => {
     void context.queryClient.ensureQueryData(servicesQuery);
   },
@@ -310,7 +310,7 @@ function ServicesPage() {
                 <ShoppingCart className="h-3.5 w-3.5" /> {pack.ctaLabel ?? t("packs.cta")}
               </button>
               <Link
-                to="/site/panier"
+                to="/panier"
                 className="mt-2 flex items-center justify-center gap-1 text-[11px] font-semibold text-white/55 transition hover:text-white"
               >
                 Voir le panier <ArrowRight className="h-3 w-3" />

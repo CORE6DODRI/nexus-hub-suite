@@ -9,25 +9,24 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
-import { Route as LoginRouteImport } from './routes/login'
+import { Route as SiteRouteRouteImport } from './routes/_site/route'
+import { Route as BackdoorRouteImport } from './routes/backdoor'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
-import { Route as SiteRouteRouteImport } from './routes/site/route'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedSecurityRouteImport } from './routes/_authenticated/security'
+import { Route as SiteIndexRouteImport } from './routes/_site/index'
+import { Route as SiteAProposRouteImport } from './routes/_site/a-propos'
+import { Route as SiteBlogRouteImport } from './routes/_site/blog'
+import { Route as SiteContactRouteImport } from './routes/_site/contact'
+import { Route as SitePanierRouteImport } from './routes/_site/panier'
+import { Route as SiteRealisationsRouteImport } from './routes/_site/realisations'
+import { Route as SiteSaasRouteImport } from './routes/_site/saas'
+import { Route as SiteServicesRouteImport } from './routes/_site/services'
 import { Route as CmsIndexRouteImport } from './routes/cms/index'
 import { Route as CmsSlugRouteImport } from './routes/cms/$slug'
 import { Route as CmsContactRouteImport } from './routes/cms/contact'
-import { Route as SiteIndexRouteImport } from './routes/site/index'
-import { Route as SiteAProposRouteImport } from './routes/site/a-propos'
-import { Route as SiteBlogRouteImport } from './routes/site/blog'
-import { Route as SiteContactRouteImport } from './routes/site/contact'
-import { Route as SitePanierRouteImport } from './routes/site/panier'
-import { Route as SiteRealisationsRouteImport } from './routes/site/realisations'
-import { Route as SiteSaasRouteImport } from './routes/site/saas'
-import { Route as SiteServicesRouteImport } from './routes/site/services'
 import { Route as AuthenticatedAdministrationActivityLogsRouteImport } from './routes/_authenticated/administration/activity-logs'
 import { Route as AuthenticatedAdministrationPermissionsRouteImport } from './routes/_authenticated/administration/permissions'
 import { Route as AuthenticatedAdministrationRolesRouteImport } from './routes/_authenticated/administration/roles'
@@ -40,28 +39,22 @@ import { Route as AuthenticatedParametersConnectionsRouteImport } from './routes
 import { Route as AuthenticatedParametersModulesRouteImport } from './routes/_authenticated/parameters/modules'
 import { Route as AuthenticatedParametersSystemRouteImport } from './routes/_authenticated/parameters/system'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
+const SiteRouteRoute = SiteRouteRouteImport.update({
+  id: '/_site',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BackdoorRoute = BackdoorRouteImport.update({
+  id: '/backdoor',
+  path: '/backdoor',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SiteRouteRoute = SiteRouteRouteImport.update({
-  id: '/site',
-  path: '/site',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
@@ -78,21 +71,6 @@ const AuthenticatedSecurityRoute = AuthenticatedSecurityRouteImport.update({
   id: '/security',
   path: '/security',
   getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const CmsIndexRoute = CmsIndexRouteImport.update({
-  id: '/cms/',
-  path: '/cms/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CmsSlugRoute = CmsSlugRouteImport.update({
-  id: '/cms/$slug',
-  path: '/cms/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CmsContactRoute = CmsContactRouteImport.update({
-  id: '/cms/contact',
-  path: '/cms/contact',
-  getParentRoute: () => rootRouteImport,
 } as any)
 const SiteIndexRoute = SiteIndexRouteImport.update({
   id: '/',
@@ -133,6 +111,21 @@ const SiteServicesRoute = SiteServicesRouteImport.update({
   id: '/services',
   path: '/services',
   getParentRoute: () => SiteRouteRoute,
+} as any)
+const CmsIndexRoute = CmsIndexRouteImport.update({
+  id: '/cms/',
+  path: '/cms/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CmsSlugRoute = CmsSlugRouteImport.update({
+  id: '/cms/$slug',
+  path: '/cms/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CmsContactRoute = CmsContactRouteImport.update({
+  id: '/cms/contact',
+  path: '/cms/contact',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedAdministrationActivityLogsRoute =
   AuthenticatedAdministrationActivityLogsRouteImport.update({
@@ -202,24 +195,22 @@ const AuthenticatedParametersSystemRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/site': typeof SiteRouteRouteWithChildren
-  '/login': typeof LoginRoute
+  '/': typeof SiteIndexRoute
+  '/backdoor': typeof BackdoorRoute
   '/reset-password': typeof ResetPasswordRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/security': typeof AuthenticatedSecurityRoute
+  '/a-propos': typeof SiteAProposRoute
+  '/blog': typeof SiteBlogRoute
+  '/contact': typeof SiteContactRoute
+  '/panier': typeof SitePanierRoute
+  '/realisations': typeof SiteRealisationsRoute
+  '/saas': typeof SiteSaasRoute
+  '/services': typeof SiteServicesRoute
   '/cms/$slug': typeof CmsSlugRoute
   '/cms/contact': typeof CmsContactRoute
-  '/site/a-propos': typeof SiteAProposRoute
-  '/site/blog': typeof SiteBlogRoute
-  '/site/contact': typeof SiteContactRoute
-  '/site/panier': typeof SitePanierRoute
-  '/site/realisations': typeof SiteRealisationsRoute
-  '/site/saas': typeof SiteSaasRoute
-  '/site/services': typeof SiteServicesRoute
   '/cms/': typeof CmsIndexRoute
-  '/site/': typeof SiteIndexRoute
   '/administration/activity-logs': typeof AuthenticatedAdministrationActivityLogsRoute
   '/administration/permissions': typeof AuthenticatedAdministrationPermissionsRoute
   '/administration/roles': typeof AuthenticatedAdministrationRolesRoute
@@ -233,23 +224,22 @@ export interface FileRoutesByFullPath {
   '/parameters/': typeof AuthenticatedParametersIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/login': typeof LoginRoute
+  '/': typeof SiteIndexRoute
+  '/backdoor': typeof BackdoorRoute
   '/reset-password': typeof ResetPasswordRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/security': typeof AuthenticatedSecurityRoute
+  '/a-propos': typeof SiteAProposRoute
+  '/blog': typeof SiteBlogRoute
+  '/contact': typeof SiteContactRoute
+  '/panier': typeof SitePanierRoute
+  '/realisations': typeof SiteRealisationsRoute
+  '/saas': typeof SiteSaasRoute
+  '/services': typeof SiteServicesRoute
   '/cms/$slug': typeof CmsSlugRoute
   '/cms/contact': typeof CmsContactRoute
-  '/site/a-propos': typeof SiteAProposRoute
-  '/site/blog': typeof SiteBlogRoute
-  '/site/contact': typeof SiteContactRoute
-  '/site/panier': typeof SitePanierRoute
-  '/site/realisations': typeof SiteRealisationsRoute
-  '/site/saas': typeof SiteSaasRoute
-  '/site/services': typeof SiteServicesRoute
   '/cms': typeof CmsIndexRoute
-  '/site': typeof SiteIndexRoute
   '/administration/activity-logs': typeof AuthenticatedAdministrationActivityLogsRoute
   '/administration/permissions': typeof AuthenticatedAdministrationPermissionsRoute
   '/administration/roles': typeof AuthenticatedAdministrationRolesRoute
@@ -264,25 +254,24 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
-  '/site': typeof SiteRouteRouteWithChildren
-  '/login': typeof LoginRoute
+  '/_site': typeof SiteRouteRouteWithChildren
+  '/backdoor': typeof BackdoorRoute
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/security': typeof AuthenticatedSecurityRoute
+  '/_site/a-propos': typeof SiteAProposRoute
+  '/_site/blog': typeof SiteBlogRoute
+  '/_site/contact': typeof SiteContactRoute
+  '/_site/panier': typeof SitePanierRoute
+  '/_site/realisations': typeof SiteRealisationsRoute
+  '/_site/saas': typeof SiteSaasRoute
+  '/_site/services': typeof SiteServicesRoute
   '/cms/$slug': typeof CmsSlugRoute
   '/cms/contact': typeof CmsContactRoute
-  '/site/a-propos': typeof SiteAProposRoute
-  '/site/blog': typeof SiteBlogRoute
-  '/site/contact': typeof SiteContactRoute
-  '/site/panier': typeof SitePanierRoute
-  '/site/realisations': typeof SiteRealisationsRoute
-  '/site/saas': typeof SiteSaasRoute
-  '/site/services': typeof SiteServicesRoute
+  '/_site/': typeof SiteIndexRoute
   '/cms/': typeof CmsIndexRoute
-  '/site/': typeof SiteIndexRoute
   '/_authenticated/administration/activity-logs': typeof AuthenticatedAdministrationActivityLogsRoute
   '/_authenticated/administration/permissions': typeof AuthenticatedAdministrationPermissionsRoute
   '/_authenticated/administration/roles': typeof AuthenticatedAdministrationRolesRoute
@@ -299,23 +288,21 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/site'
-    | '/login'
+    | '/backdoor'
     | '/reset-password'
     | '/dashboard'
     | '/profile'
     | '/security'
+    | '/a-propos'
+    | '/blog'
+    | '/contact'
+    | '/panier'
+    | '/realisations'
+    | '/saas'
+    | '/services'
     | '/cms/$slug'
     | '/cms/contact'
-    | '/site/a-propos'
-    | '/site/blog'
-    | '/site/contact'
-    | '/site/panier'
-    | '/site/realisations'
-    | '/site/saas'
-    | '/site/services'
     | '/cms/'
-    | '/site/'
     | '/administration/activity-logs'
     | '/administration/permissions'
     | '/administration/roles'
@@ -330,22 +317,21 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/login'
+    | '/backdoor'
     | '/reset-password'
     | '/dashboard'
     | '/profile'
     | '/security'
+    | '/a-propos'
+    | '/blog'
+    | '/contact'
+    | '/panier'
+    | '/realisations'
+    | '/saas'
+    | '/services'
     | '/cms/$slug'
     | '/cms/contact'
-    | '/site/a-propos'
-    | '/site/blog'
-    | '/site/contact'
-    | '/site/panier'
-    | '/site/realisations'
-    | '/site/saas'
-    | '/site/services'
     | '/cms'
-    | '/site'
     | '/administration/activity-logs'
     | '/administration/permissions'
     | '/administration/roles'
@@ -359,25 +345,24 @@ export interface FileRouteTypes {
     | '/parameters'
   id:
     | '__root__'
-    | '/'
     | '/_authenticated'
-    | '/site'
-    | '/login'
+    | '/_site'
+    | '/backdoor'
     | '/reset-password'
     | '/_authenticated/dashboard'
     | '/_authenticated/profile'
     | '/_authenticated/security'
+    | '/_site/a-propos'
+    | '/_site/blog'
+    | '/_site/contact'
+    | '/_site/panier'
+    | '/_site/realisations'
+    | '/_site/saas'
+    | '/_site/services'
     | '/cms/$slug'
     | '/cms/contact'
-    | '/site/a-propos'
-    | '/site/blog'
-    | '/site/contact'
-    | '/site/panier'
-    | '/site/realisations'
-    | '/site/saas'
-    | '/site/services'
+    | '/_site/'
     | '/cms/'
-    | '/site/'
     | '/_authenticated/administration/activity-logs'
     | '/_authenticated/administration/permissions'
     | '/_authenticated/administration/roles'
@@ -392,10 +377,9 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   SiteRouteRoute: typeof SiteRouteRouteWithChildren
-  LoginRoute: typeof LoginRoute
+  BackdoorRoute: typeof BackdoorRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   CmsSlugRoute: typeof CmsSlugRoute
   CmsContactRoute: typeof CmsContactRoute
@@ -404,13 +388,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
@@ -418,11 +395,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
+    '/_site': {
+      id: '/_site'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof SiteRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/backdoor': {
+      id: '/backdoor'
+      path: '/backdoor'
+      fullPath: '/backdoor'
+      preLoaderRoute: typeof BackdoorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reset-password': {
@@ -430,13 +414,6 @@ declare module '@tanstack/react-router' {
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/site': {
-      id: '/site'
-      path: '/site'
-      fullPath: '/site'
-      preLoaderRoute: typeof SiteRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/dashboard': {
@@ -460,6 +437,62 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSecurityRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_site/': {
+      id: '/_site/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof SiteIndexRouteImport
+      parentRoute: typeof SiteRouteRoute
+    }
+    '/_site/a-propos': {
+      id: '/_site/a-propos'
+      path: '/a-propos'
+      fullPath: '/a-propos'
+      preLoaderRoute: typeof SiteAProposRouteImport
+      parentRoute: typeof SiteRouteRoute
+    }
+    '/_site/blog': {
+      id: '/_site/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof SiteBlogRouteImport
+      parentRoute: typeof SiteRouteRoute
+    }
+    '/_site/contact': {
+      id: '/_site/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof SiteContactRouteImport
+      parentRoute: typeof SiteRouteRoute
+    }
+    '/_site/panier': {
+      id: '/_site/panier'
+      path: '/panier'
+      fullPath: '/panier'
+      preLoaderRoute: typeof SitePanierRouteImport
+      parentRoute: typeof SiteRouteRoute
+    }
+    '/_site/realisations': {
+      id: '/_site/realisations'
+      path: '/realisations'
+      fullPath: '/realisations'
+      preLoaderRoute: typeof SiteRealisationsRouteImport
+      parentRoute: typeof SiteRouteRoute
+    }
+    '/_site/saas': {
+      id: '/_site/saas'
+      path: '/saas'
+      fullPath: '/saas'
+      preLoaderRoute: typeof SiteSaasRouteImport
+      parentRoute: typeof SiteRouteRoute
+    }
+    '/_site/services': {
+      id: '/_site/services'
+      path: '/services'
+      fullPath: '/services'
+      preLoaderRoute: typeof SiteServicesRouteImport
+      parentRoute: typeof SiteRouteRoute
+    }
     '/cms/': {
       id: '/cms/'
       path: '/cms'
@@ -480,62 +513,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/cms/contact'
       preLoaderRoute: typeof CmsContactRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/site/': {
-      id: '/site/'
-      path: '/'
-      fullPath: '/site/'
-      preLoaderRoute: typeof SiteIndexRouteImport
-      parentRoute: typeof SiteRouteRoute
-    }
-    '/site/a-propos': {
-      id: '/site/a-propos'
-      path: '/a-propos'
-      fullPath: '/site/a-propos'
-      preLoaderRoute: typeof SiteAProposRouteImport
-      parentRoute: typeof SiteRouteRoute
-    }
-    '/site/blog': {
-      id: '/site/blog'
-      path: '/blog'
-      fullPath: '/site/blog'
-      preLoaderRoute: typeof SiteBlogRouteImport
-      parentRoute: typeof SiteRouteRoute
-    }
-    '/site/contact': {
-      id: '/site/contact'
-      path: '/contact'
-      fullPath: '/site/contact'
-      preLoaderRoute: typeof SiteContactRouteImport
-      parentRoute: typeof SiteRouteRoute
-    }
-    '/site/panier': {
-      id: '/site/panier'
-      path: '/panier'
-      fullPath: '/site/panier'
-      preLoaderRoute: typeof SitePanierRouteImport
-      parentRoute: typeof SiteRouteRoute
-    }
-    '/site/realisations': {
-      id: '/site/realisations'
-      path: '/realisations'
-      fullPath: '/site/realisations'
-      preLoaderRoute: typeof SiteRealisationsRouteImport
-      parentRoute: typeof SiteRouteRoute
-    }
-    '/site/saas': {
-      id: '/site/saas'
-      path: '/saas'
-      fullPath: '/site/saas'
-      preLoaderRoute: typeof SiteSaasRouteImport
-      parentRoute: typeof SiteRouteRoute
-    }
-    '/site/services': {
-      id: '/site/services'
-      path: '/services'
-      fullPath: '/site/services'
-      preLoaderRoute: typeof SiteServicesRouteImport
-      parentRoute: typeof SiteRouteRoute
     }
     '/_authenticated/administration/activity-logs': {
       id: '/_authenticated/administration/activity-logs'
@@ -684,10 +661,9 @@ const SiteRouteRouteWithChildren = SiteRouteRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   SiteRouteRoute: SiteRouteRouteWithChildren,
-  LoginRoute: LoginRoute,
+  BackdoorRoute: BackdoorRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   CmsSlugRoute: CmsSlugRoute,
   CmsContactRoute: CmsContactRoute,

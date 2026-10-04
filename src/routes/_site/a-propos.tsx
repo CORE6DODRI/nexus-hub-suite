@@ -16,7 +16,7 @@ import { SiteLayout } from "@website/components/site/SiteLayout";
 import { useT, Txt } from "@website/lib/site-text-context";
 import aboutReception from "@website/assets/about-reception.jpg";
 
-export const Route = createFileRoute("/site/a-propos")({
+export const Route = createFileRoute("/_site/a-propos")({
   component: AboutPage,
   head: () => ({
     meta: [
