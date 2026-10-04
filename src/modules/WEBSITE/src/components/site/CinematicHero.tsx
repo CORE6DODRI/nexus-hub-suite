@@ -3,12 +3,12 @@ import { motion, useScroll, useTransform, useSpring, type MotionValue } from "fr
 import Lenis from "lenis";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Sparkles, MousePointer2, Award, Briefcase, Headphones, Users } from "lucide-react";
-import { useIsMobile } from "@/hooks/use-mobile";
-import { useT, Txt, useCmsImage } from "@/lib/site-text-context";
-import { PartnersStrip } from "@/components/site/PartnersStrip";
-import exteriorImg from "@/assets/scene-exterior.jpg";
-import doorsImg from "@/assets/scene-doors.jpg";
-import receptionImg from "@/assets/scene-reception-desk.jpg";
+import { useIsMobile } from "@website/hooks/use-mobile";
+import { useT, Txt, useCmsImage } from "@website/lib/site-text-context";
+import { PartnersStrip } from "@website/components/site/PartnersStrip";
+import exteriorImg from "@website/assets/scene-exterior.jpg";
+import doorsImg from "@website/assets/scene-doors.jpg";
+import receptionImg from "@website/assets/scene-reception-desk.jpg";
 
 const STATS = [
   { icon: Users, value: "120+", label: "Clients satisfaits" },
@@ -210,13 +210,13 @@ export function CinematicHero() {
               </p>
               <div className="mt-10 flex flex-wrap items-center gap-4">
                 <Link
-                  to="/services"
+                  to="/site/services"
                   className="btn-gradient inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold"
                 >
                   <Txt page="accueil" k="hero.cta1" /> <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
-                  to="/contact"
+                  to="/site/contact"
                   className="btn-ghost-glow inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold"
                 >
                   <Txt page="accueil" k="hero.cta2" />
@@ -283,13 +283,13 @@ export function CinematicHero() {
 
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
               <Link
-                to="/a-propos"
+                to="/site/a-propos"
                 className="btn-gradient inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold"
               >
                 Notre histoire <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
-                to="/services"
+                to="/site/services"
                 className="btn-ghost-glow inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold"
               >
                 Explorer nos services

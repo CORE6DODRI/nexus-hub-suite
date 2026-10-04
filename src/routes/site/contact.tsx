@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Mail, MapPin, Phone, Clock, Facebook, Instagram, Linkedin, Youtube, ArrowRight, Check } from "lucide-react";
-import { SiteLayout, PageHeader } from "@/components/site/SiteLayout";
-import { useT, Txt, useCmsImage } from "@/lib/site-text-context";
-import heroContact from "@/assets/hero-contact.jpg";
+import { SiteLayout, PageHeader } from "@website/components/site/SiteLayout";
+import { useT, Txt, useCmsImage } from "@website/lib/site-text-context";
+import heroContact from "@website/assets/hero-contact.jpg";
 
-export const Route = createFileRoute("/contact")({
+export const Route = createFileRoute("/site/contact")({
   component: ContactPage,
   head: () => ({
     meta: [

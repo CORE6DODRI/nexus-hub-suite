@@ -12,11 +12,11 @@ import {
   Target,
   Users,
 } from "lucide-react";
-import { SiteLayout } from "@/components/site/SiteLayout";
-import { useT, Txt } from "@/lib/site-text-context";
-import aboutReception from "@/assets/about-reception.jpg";
+import { SiteLayout } from "@website/components/site/SiteLayout";
+import { useT, Txt } from "@website/lib/site-text-context";
+import aboutReception from "@website/assets/about-reception.jpg";
 
-export const Route = createFileRoute("/a-propos")({
+export const Route = createFileRoute("/site/a-propos")({
   component: AboutPage,
   head: () => ({
     meta: [

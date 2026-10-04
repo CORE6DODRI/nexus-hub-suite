@@ -1,21 +1,21 @@
-import imgDomo from "@/assets/service-domotique.jpg";
-import imgDigital from "@/assets/service-digital.jpg";
-import imgReseaux from "@/assets/service-reseaux.jpg";
-import imgIA from "@/assets/service-ia.jpg";
-import imgComm from "@/assets/service-communication.jpg";
-import imgEvents from "@/assets/service-events.jpg";
+import imgDomo from "@website/assets/service-domotique.jpg";
+import imgDigital from "@website/assets/service-digital.jpg";
+import imgReseaux from "@website/assets/service-reseaux.jpg";
+import imgIA from "@website/assets/service-ia.jpg";
+import imgComm from "@website/assets/service-communication.jpg";
+import imgEvents from "@website/assets/service-events.jpg";
 
-import pAmpoule from "@/assets/products/ampoule-connectee.jpg";
-import pBorne from "@/assets/products/borne-wifi6.jpg";
-import pVitrine from "@/assets/products/pack-site-vitrine.jpg";
-import pAgentIA from "@/assets/products/agent-ia-support.jpg";
-import pBranding from "@/assets/products/pack-branding.jpg";
-import pLed from "@/assets/products/ecran-led-outdoor.jpg";
-import pSerrure from "@/assets/products/serrure-intelligente.jpg";
-import pSwitch from "@/assets/products/switch-poe-24.jpg";
-import pThermostat from "@/assets/products/thermostat-smart.jpg";
-import pBaie from "@/assets/products/baie-42u.jpg";
-import pCamera from "@/assets/products/camera-4k.jpg";
+import pAmpoule from "@website/assets/products/ampoule-connectee.jpg";
+import pBorne from "@website/assets/products/borne-wifi6.jpg";
+import pVitrine from "@website/assets/products/pack-site-vitrine.jpg";
+import pAgentIA from "@website/assets/products/agent-ia-support.jpg";
+import pBranding from "@website/assets/products/pack-branding.jpg";
+import pLed from "@website/assets/products/ecran-led-outdoor.jpg";
+import pSerrure from "@website/assets/products/serrure-intelligente.jpg";
+import pSwitch from "@website/assets/products/switch-poe-24.jpg";
+import pThermostat from "@website/assets/products/thermostat-smart.jpg";
+import pBaie from "@website/assets/products/baie-42u.jpg";
+import pCamera from "@website/assets/products/camera-4k.jpg";
 
 /** Fallback visuals used until the CMS media library provides an image URL. */
 export const CATEGORY_IMAGES: Record<string, string> = {

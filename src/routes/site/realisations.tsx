@@ -2,18 +2,18 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { ArrowRight } from "lucide-react";
-import { SiteLayout, PageHeader } from "@/components/site/SiteLayout";
-import { useT, Txt, useCmsImage } from "@/lib/site-text-context";
-import heroPortfolio from "@/assets/hero-portfolio.jpg";
-import { getProjects } from "@/lib/content.functions";
-import { categoryImage } from "@/lib/content-images";
+import { SiteLayout, PageHeader } from "@website/components/site/SiteLayout";
+import { useT, Txt, useCmsImage } from "@website/lib/site-text-context";
+import heroPortfolio from "@website/assets/hero-portfolio.jpg";
+import { getProjects } from "@website/lib/content.functions";
+import { categoryImage } from "@website/lib/content-images";
 
 const projectsQuery = queryOptions({
   queryKey: ["projects"],
   queryFn: () => getProjects(),
 });
 
-export const Route = createFileRoute("/realisations")({
+export const Route = createFileRoute("/site/realisations")({
   loader: ({ context }) => {
     void context.queryClient.ensureQueryData(projectsQuery);
   },
@@ -120,7 +120,7 @@ function RealisationsPage() {
             <h3 className="text-2xl font-black text-white sm:text-3xl"><Txt page="realisations" k="cta.title" /></h3>
             <p className="mt-2 text-white/70"><Txt page="realisations" k="cta.body" /></p>
           </div>
-          <Link to="/contact" className="btn-gradient inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold">
+          <Link to="/site/contact" className="btn-gradient inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold">
             <Txt page="realisations" k="cta.button" /> <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
