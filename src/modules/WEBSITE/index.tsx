@@ -7,9 +7,9 @@ import type { ModuleUIProps } from "@/modules/registry";
 /** WEBSITE module: live preview of the public front office inside the Core. */
 export default function WebsiteModule(_props: ModuleUIProps) {
   const nav = useSiteNav();
-  const [path, setPath] = useState("/cms");
+  const [path, setPath] = useState("/site");
   const pages = [
-    { label: "Accueil", href: "/cms" },
+    { label: "Accueil", href: "/site" },
     ...(nav.data ?? [])
       .filter((p) => p.slug !== "home")
       .map((p) => ({ label: p.nav_label || p.title, href: `/cms/${p.slug}` })),

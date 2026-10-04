@@ -10,7 +10,8 @@ import { useAuth } from "@website/lib/auth";
 import { useVisitTracker } from "@website/lib/use-visit-tracker";
 
 export function slugFromPath(pathname: string) {
-  return pathname === "/" ? "accueil" : pathname.replace(/^\//, "").replace(/\/$/, "");
+  const p = pathname.replace(/^\/site/, "") || "/";
+  return p === "/" ? "accueil" : p.replace(/^\//, "").replace(/\/$/, "");
 }
 
 export function SiteLayout({ children }: { children: ReactNode }) {

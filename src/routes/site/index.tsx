@@ -13,7 +13,7 @@ import { CinematicHero } from "@website/components/site/CinematicHero";
 import { useT, Txt } from "@website/lib/site-text-context";
 import aboutReception from "@website/assets/about-reception.jpg";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/site/")({
   component: HomePage,
   head: () => ({
     meta: [
