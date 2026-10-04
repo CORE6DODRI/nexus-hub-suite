@@ -8,12 +8,12 @@ import {
   Megaphone,
   Network,
 } from "lucide-react";
-import { SiteLayout } from "@/components/site/SiteLayout";
-import { CinematicHero } from "@/components/site/CinematicHero";
-import { useT, Txt } from "@/lib/site-text-context";
-import aboutReception from "@/assets/about-reception.jpg";
+import { SiteLayout } from "@website/components/site/SiteLayout";
+import { CinematicHero } from "@website/components/site/CinematicHero";
+import { useT, Txt } from "@website/lib/site-text-context";
+import aboutReception from "@website/assets/about-reception.jpg";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/site/")({
   component: HomePage,
   head: () => ({
     meta: [
@@ -61,7 +61,7 @@ function HomePage() {
             </h2>
           </div>
           <Link
-            to="/services"
+            to="/site/services"
             className="btn-ghost-glow inline-flex items-center gap-2 self-start rounded-full px-5 py-2.5 text-sm font-semibold"
           >
             <Txt page="accueil" k="services.cta" /> <ArrowRight className="h-4 w-4" />
@@ -71,7 +71,7 @@ function HomePage() {
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {SERVICES.map(({ key, label, icon: Icon, desc }) => (
             <Link
-              to="/services"
+              to="/site/services"
               key={key}
               className="glass card-hover group relative overflow-hidden p-7"
             >
@@ -130,7 +130,7 @@ function HomePage() {
             </ul>
             <div className="mt-8">
               <Link
-                to="/a-propos"
+                to="/site/a-propos"
                 className="btn-gradient inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold"
               >
                 <Txt page="accueil" k="about.cta" /> <ArrowRight className="h-4 w-4" />
@@ -155,7 +155,7 @@ function HomePage() {
               </p>
             </div>
             <Link
-              to="/contact"
+              to="/site/contact"
               className="inline-flex items-center gap-2 rounded-full bg-black px-7 py-4 text-sm font-semibold text-white shadow-2xl transition hover:bg-black/85"
             >
               <Txt page="accueil" k="cta.button" /> <ArrowRight className="h-4 w-4" />

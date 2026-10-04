@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSiteConfig } from "@/lib/site-text-context";
+import { useSiteConfig } from "@website/lib/site-text-context";
 
 function useCountdown(targetAt: string | null) {
   const [now, setNow] = useState(() => Date.now());

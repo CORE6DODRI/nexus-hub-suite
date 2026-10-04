@@ -19,18 +19,18 @@ import {
   ShoppingCart,
   Zap,
 } from "lucide-react";
-import { SiteLayout } from "@/components/site/SiteLayout";
-import { useT, Txt } from "@/lib/site-text-context";
-import { getServicesContent } from "@/lib/content.functions";
-import { categoryImage, productImage } from "@/lib/content-images";
-import { useCart } from "@/lib/cart";
+import { SiteLayout } from "@website/components/site/SiteLayout";
+import { useT, Txt } from "@website/lib/site-text-context";
+import { getServicesContent } from "@website/lib/content.functions";
+import { categoryImage, productImage } from "@website/lib/content-images";
+import { useCart } from "@website/lib/cart";
 
 const servicesQuery = queryOptions({
   queryKey: ["services-content"],
   queryFn: () => getServicesContent(),
 });
 
-export const Route = createFileRoute("/services")({
+export const Route = createFileRoute("/site/services")({
   loader: ({ context }) => {
     void context.queryClient.ensureQueryData(servicesQuery);
   },
@@ -310,7 +310,7 @@ function ServicesPage() {
                 <ShoppingCart className="h-3.5 w-3.5" /> {pack.ctaLabel ?? t("packs.cta")}
               </button>
               <Link
-                to="/panier"
+                to="/site/panier"
                 className="mt-2 flex items-center justify-center gap-1 text-[11px] font-semibold text-white/55 transition hover:text-white"
               >
                 Voir le panier <ArrowRight className="h-3 w-3" />

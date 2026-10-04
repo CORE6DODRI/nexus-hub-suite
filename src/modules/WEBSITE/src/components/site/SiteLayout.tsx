@@ -4,13 +4,14 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 import { MaintenanceScreen } from "./MaintenanceScreen";
-import { useScrollPageNav, PAGE_ORDER } from "@/lib/use-scroll-page-nav";
-import { CustomTexts, useSiteConfig } from "@/lib/site-text-context";
-import { useAuth } from "@/lib/auth";
-import { useVisitTracker } from "@/lib/use-visit-tracker";
+import { useScrollPageNav, PAGE_ORDER } from "@website/lib/use-scroll-page-nav";
+import { CustomTexts, useSiteConfig } from "@website/lib/site-text-context";
+import { useAuth } from "@website/lib/auth";
+import { useVisitTracker } from "@website/lib/use-visit-tracker";
 
 export function slugFromPath(pathname: string) {
-  return pathname === "/" ? "accueil" : pathname.replace(/^\//, "").replace(/\/$/, "");
+  const p = pathname.replace(/^\/site/, "") || "/";
+  return p === "/" ? "accueil" : p.replace(/^\//, "").replace(/\/$/, "");
 }
 
 export function SiteLayout({ children }: { children: ReactNode }) {
@@ -44,7 +45,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           <div className="mx-auto flex min-h-[60vh] max-w-3xl flex-col items-center justify-center px-5 text-center">
             <h1 className="text-3xl font-black text-white">Page indisponible</h1>
             <p className="mt-3 text-white/60">Cette page n'est pas accessible pour le moment.</p>
-            <Link to="/" className="btn-gradient mt-6 rounded-full px-5 py-2.5 text-sm font-semibold">
+            <Link to="/site" className="btn-gradient mt-6 rounded-full px-5 py-2.5 text-sm font-semibold">
               Retour à l'accueil
             </Link>
           </div>

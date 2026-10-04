@@ -1,18 +1,18 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { Calendar, Clock, Search, ArrowRight } from "lucide-react";
-import { SiteLayout, PageHeader } from "@/components/site/SiteLayout";
-import { useT, Txt } from "@/lib/site-text-context";
-import { getBlogPosts } from "@/lib/content.functions";
-import { CATEGORY_IMAGES } from "@/lib/content-images";
-import imgDigital from "@/assets/service-digital.jpg";
+import { SiteLayout, PageHeader } from "@website/components/site/SiteLayout";
+import { useT, Txt } from "@website/lib/site-text-context";
+import { getBlogPosts } from "@website/lib/content.functions";
+import { CATEGORY_IMAGES } from "@website/lib/content-images";
+import imgDigital from "@website/assets/service-digital.jpg";
 
 const postsQuery = queryOptions({
   queryKey: ["blog-posts"],
   queryFn: () => getBlogPosts(),
 });
 
-export const Route = createFileRoute("/blog")({
+export const Route = createFileRoute("/site/blog")({
   loader: ({ context }) => {
     void context.queryClient.ensureQueryData(postsQuery);
   },

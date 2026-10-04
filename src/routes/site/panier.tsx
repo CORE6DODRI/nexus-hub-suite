@@ -1,11 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowRight, Check, Mail, Minus, Package, Plus, ShoppingCart, Trash2 } from "lucide-react";
-import { SiteLayout, PageHeader } from "@/components/site/SiteLayout";
-import { useCart } from "@/lib/cart";
-import { ORDER_STATUSES, ORDER_STATUS_LABELS } from "@/lib/shop.functions";
+import { SiteLayout, PageHeader } from "@website/components/site/SiteLayout";
+import { useCart } from "@website/lib/cart";
+import { ORDER_STATUSES, ORDER_STATUS_LABELS } from "@website/lib/shop.functions";
 
-export const Route = createFileRoute("/panier")({
+export const Route = createFileRoute("/site/panier")({
   component: CartPage,
   head: () => ({
     meta: [
@@ -102,7 +102,7 @@ function CartPage() {
                 {!loading && items.length === 0 && (
                   <div className="mt-5 text-sm text-white/60">
                     Votre panier est vide.{" "}
-                    <Link to="/services" className="underline hover:text-white">
+                    <Link to="/site/services" className="underline hover:text-white">
                       Découvrir nos services
                     </Link>
                   </div>
