@@ -198,22 +198,40 @@ export type Database = {
       }
       company: {
         Row: {
+          core_logo_large_size: number
+          core_logo_large_url: string | null
+          core_logo_small_size: number
+          core_logo_small_url: string | null
           created_at: string
           id: string
+          login_logo_size: number
+          login_logo_url: string | null
           logo_url: string | null
           name: string
           updated_at: string
         }
         Insert: {
+          core_logo_large_size?: number
+          core_logo_large_url?: string | null
+          core_logo_small_size?: number
+          core_logo_small_url?: string | null
           created_at?: string
           id?: string
+          login_logo_size?: number
+          login_logo_url?: string | null
           logo_url?: string | null
           name: string
           updated_at?: string
         }
         Update: {
+          core_logo_large_size?: number
+          core_logo_large_url?: string | null
+          core_logo_small_size?: number
+          core_logo_small_url?: string | null
           created_at?: string
           id?: string
+          login_logo_size?: number
+          login_logo_url?: string | null
           logo_url?: string | null
           name?: string
           updated_at?: string
