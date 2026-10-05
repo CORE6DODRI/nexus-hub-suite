@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DodriLogo } from "@/components/brand/DodriLogo";
+import { CompanyBrandLogo } from "@/components/brand/CompanyBrandLogo";
 import { useAuth, isMasterAdmin } from "@/hooks/useAuth";
 
 export const Route = createFileRoute("/backdoor")({
@@ -96,7 +97,7 @@ function LoginPage() {
 
       <div className="panel relative w-full max-w-md p-8">
         <div className="flex flex-col items-center text-center">
-          <DodriLogo />
+          <CompanyBrandLogo variant="login" fallback={<DodriLogo />} />
           <p className="mt-4 text-sm text-muted-foreground">
             The intelligence layer for your business
           </p>
