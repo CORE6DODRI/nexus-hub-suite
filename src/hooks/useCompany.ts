@@ -5,9 +5,25 @@ export type CompanyRow = {
   id: string;
   name: string;
   logo_url: string | null;
+  login_logo_url: string | null;
+  login_logo_size: number;
+  core_logo_large_url: string | null;
+  core_logo_large_size: number;
+  core_logo_small_url: string | null;
+  core_logo_small_size: number;
   created_at: string;
   updated_at: string;
 };
+
+export type CompanyBranding = Pick<
+  CompanyRow,
+  | "login_logo_url"
+  | "login_logo_size"
+  | "core_logo_large_url"
+  | "core_logo_large_size"
+  | "core_logo_small_url"
+  | "core_logo_small_size"
+>;
 
 export type SubscriptionPlan = "MONTHLY" | "SEMI_ANNUAL" | "ANNUAL";
 export type SubscriptionStatus = "ACTIVE" | "EXPIRED" | "SUSPENDED" | "CANCELLED";
@@ -69,15 +85,34 @@ export function useCompanyLogoUrl(path: string | null | undefined) {
   });
 }
 
+export function useCompanyBranding() {
+  return useQuery({
+    queryKey: ["company_branding"],
+    queryFn: async (): Promise<CompanyBranding | null> => {
+      const { data, error } = await supabase
+        .from("company")
+        .select(
+          "login_logo_url, login_logo_size, core_logo_large_url, core_logo_large_size, core_logo_small_url, core_logo_small_size",
+        )
+        .limit(1)
+        .maybeSingle();
+      if (error) throw error;
+      return data as CompanyBranding | null;
+    },
+    retry: false,
+  });
+}
+
 export function useSubscription(companyId?: string) {
   return useQuery({
     queryKey: ["subscription", companyId],
     enabled: Boolean(companyId),
     queryFn: async (): Promise<SubscriptionRow | null> => {
+      if (!companyId) return null;
       const { data, error } = await supabase
         .from("subscriptions")
         .select("*")
-        .eq("company_id", companyId!)
+        .eq("company_id", companyId)
         .order("created_at", { ascending: false })
         .limit(1)
         .maybeSingle();
@@ -93,10 +128,11 @@ export function useSubscriptionEvents(subscriptionId?: string) {
     queryKey: ["subscription_events", subscriptionId],
     enabled: Boolean(subscriptionId),
     queryFn: async (): Promise<SubscriptionEventRow[]> => {
+      if (!subscriptionId) return [];
       const { data, error } = await supabase
         .from("subscription_events")
         .select("*")
-        .eq("subscription_id", subscriptionId!)
+        .eq("subscription_id", subscriptionId)
         .order("created_at", { ascending: false })
         .limit(50);
       if (error) throw error;

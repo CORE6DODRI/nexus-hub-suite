@@ -28,6 +28,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { DodriLogo, DodriMark } from "@/components/brand/DodriLogo";
+import { CompanyBrandLogo } from "@/components/brand/CompanyBrandLogo";
 import { useModules } from "@/hooks/useCore";
 import { useAuth } from "@/hooks/useAuth";
 import { moduleIcon } from "@/lib/dodri/icons";
@@ -45,7 +46,15 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon" variant="floating" className="border-0 bg-transparent p-0 shadow-none [&_[data-sidebar=sidebar]]:rounded-xl [&_[data-sidebar=sidebar]]:border [&_[data-sidebar=sidebar]]:border-sidebar-border [&_[data-sidebar=sidebar]]:bg-sidebar/95 [&_[data-sidebar=sidebar]]:shadow-[var(--shadow-panel)] [&_[data-sidebar=sidebar]]:backdrop-blur-xl">
       <SidebarHeader className="border-b border-sidebar-border px-3 py-3">
-        {collapsed ? <DodriMark className="mx-auto h-8 w-8" /> : <DodriLogo />}
+        {collapsed ? (
+          <CompanyBrandLogo
+            variant="coreSmall"
+            className="mx-auto h-auto max-w-full object-contain"
+            fallback={<DodriMark className="mx-auto h-8 w-8" />}
+          />
+        ) : (
+          <CompanyBrandLogo variant="coreLarge" fallback={<DodriLogo />} />
+        )}
       </SidebarHeader>
 
       <SidebarContent>
