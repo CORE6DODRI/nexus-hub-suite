@@ -81,7 +81,13 @@ function GeneralSettingsPage() {
       toast.error(uploadError.message);
       return;
     }
-    const { error } = await supabase.from("company").update({ [column]: path }).eq("id", company.data.id);
+    const logoUpdate =
+      column === "login_logo_url"
+        ? { login_logo_url: path }
+        : column === "core_logo_large_url"
+          ? { core_logo_large_url: path }
+          : { core_logo_small_url: path };
+    const { error } = await supabase.from("company").update(logoUpdate).eq("id", company.data.id);
     setBusyLogo(null);
     if (error) {
       toast.error(error.message);
@@ -94,7 +100,13 @@ function GeneralSettingsPage() {
 
   async function saveLogoSize(column: LogoSizeColumn, size: number) {
     if (!company.data) return;
-    const { error } = await supabase.from("company").update({ [column]: size }).eq("id", company.data.id);
+    const sizeUpdate =
+      column === "login_logo_size"
+        ? { login_logo_size: size }
+        : column === "core_logo_large_size"
+          ? { core_logo_large_size: size }
+          : { core_logo_small_size: size };
+    const { error } = await supabase.from("company").update(sizeUpdate).eq("id", company.data.id);
     if (error) {
       toast.error(error.message);
       return;
