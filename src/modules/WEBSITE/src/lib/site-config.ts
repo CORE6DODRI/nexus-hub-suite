@@ -27,8 +27,8 @@ export type CustomButton = {
   id: string;
   label: string;
   url: string;
-  variant?: "primary" | "ghost";
-  align?: "left" | "center" | "right";
+  variant?: "primary" | "ghost" | undefined;
+  align?: "left" | "center" | "right" | undefined;
 };
 
 export type CustomButtonMap = Record<string, CustomButton[]>;

@@ -291,17 +291,17 @@ export const IMAGE_PAGES: ImagePage[] = [
 /* ---------------------------------------------------------------------- */
 
 export type TextStyle = {
-  font?: "display" | "body" | "mono";
-  size?: string;
-  weight?: string;
-  color?: string;
-  align?: "left" | "center" | "right";
-  transform?: "none" | "uppercase" | "lowercase" | "capitalize";
-  letterSpacing?: string;
-  lineHeight?: string;
-  offsetX?: string;
-  offsetY?: string;
-  hidden?: boolean;
+  font?: "display" | "body" | "mono" | undefined;
+  size?: string | undefined;
+  weight?: string | undefined;
+  color?: string | undefined;
+  align?: "left" | "center" | "right" | undefined;
+  transform?: "none" | "uppercase" | "lowercase" | "capitalize" | undefined;
+  letterSpacing?: string | undefined;
+  lineHeight?: string | undefined;
+  offsetX?: string | undefined;
+  offsetY?: string | undefined;
+  hidden?: boolean | undefined;
 };
 
 export const FONT_CHOICES = [
