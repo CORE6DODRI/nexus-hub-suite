@@ -444,3 +444,10 @@
     animation: none !important;
   }
 }
+
+/* WEBSITE CMS editor (inside CORE) */
+.cms-editor { --brand-violet: #8b3dff; }
+.cms-editor .btn-gradient {
+  background: linear-gradient(135deg, #8b3dff, #2bb8ff);
+  color: #fff;
+}
