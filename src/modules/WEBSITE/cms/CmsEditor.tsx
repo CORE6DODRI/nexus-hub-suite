@@ -1,4 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import {
@@ -28,9 +27,6 @@ import {
   Upload,
   Wrench,
 } from "lucide-react";
-import { AdminShell } from "@/components/admin/AdminShell";
-import { MaintenanceAccess } from "@/components/admin/MaintenanceAccess";
-import { FileExplorer } from "@/components/admin/FileExplorer";
 import { supabase } from "@/integrations/supabase/client";
 import { useServerFn } from "@tanstack/react-start";
 import { runCmsAi, type CmsAiResult } from "./cms-ai.functions";
@@ -51,7 +47,6 @@ import {
   type PageVisibility,
 } from "@website/lib/site-config";
 
-export const Route = createFileRoute("/admin/cms")({ component: CmsPage });
 
 type Tab = "texts" | "ai" | "files" | "images" | "pages" | "buttons" | "partners" | "maintenance" | "typo" | "code";
 type CmsPageRow = { id: string; slug: string; title: string; sort_order: number };
@@ -84,7 +79,7 @@ function slugify(v: string) {
     .replace(/(^-|-$)/g, "");
 }
 
-function CmsPage() {
+export default function CmsPage() {
   const queryClient = useQueryClient();
   const [tab, setTab] = useState<Tab>("texts");
   const [activeSlug, setActiveSlug] = useState(TEXT_PAGES[0]!.slug);
@@ -611,7 +606,6 @@ function CmsPage() {
     { id: "buttons", label: "Boutons", icon: MousePointerClick },
     { id: "partners", label: "Partenaires", icon: Handshake },
     { id: "maintenance", label: "Maintenance", icon: Wrench },
-    { id: "files", label: "Fichiers", icon: FolderTree },
     { id: "typo", label: "Typographie", icon: Settings2 },
     { id: "code", label: "Mode code", icon: Code2 },
   ];
@@ -619,7 +613,7 @@ function CmsPage() {
 
 
   return (
-    <AdminShell title="Website Builder (CMS)" breadcrumbs={[{ label: "Website Builder (CMS)" }]}>
+    <div className="cms-editor rounded-2xl p-4 text-white" style={{ background: "#05060A" }}>
       <div className="grid gap-6 lg:grid-cols-[230px_1fr]">
         <aside className="glass h-fit p-3">
           <p className="px-2 pb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/40">Pages du site</p>
@@ -1212,7 +1206,7 @@ function CmsPage() {
                 </div>
               </div>
 
-              <MaintenanceAccess />
+              
 
               {snapshots.length > 0 && (
                 <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
@@ -1357,7 +1351,7 @@ function CmsPage() {
                 Explorateur des fichiers du projet : créez, renommez, supprimez des fichiers, dossiers et images, et
                 modifiez directement le code.
               </p>
-              <FileExplorer />
+              null
             </div>
           ) : tab === "typo" ? (
             <div className="grid max-w-xl gap-4">
@@ -1444,6 +1438,6 @@ function CmsPage() {
           )}
         </section>
       </div>
-    </AdminShell>
+    </div>
   );
 }
