@@ -1,11 +1,20 @@
-import { createContext, useContext, type CSSProperties, type ReactNode } from "react";
+import { createContext, useContext, useMemo, type CSSProperties, type ReactNode } from "react";
+import { queryOptions, useQuery } from "@tanstack/react-query";
+import { getSiteContent } from "./site-text.functions";
 import { TEXT_DEFAULTS, TYPOGRAPHY_DEFAULT, type TextStyle, type Typography } from "./site-text";
 import {
   MAINTENANCE_DEFAULT,
   type CustomButton,
+  type CustomButtonMap,
   type MaintenanceConfig,
   type PageVisibility,
 } from "./site-config";
+
+export const siteTextsQuery = queryOptions({
+  queryKey: ["site-texts"],
+  queryFn: () => getSiteContent(),
+  staleTime: 30_000,
+});
 
 type Ctx = {
   texts: Record<string, string>;
@@ -14,10 +23,10 @@ type Ctx = {
   typography: Typography;
   maintenance: MaintenanceConfig;
   pageVisibility: PageVisibility;
-  buttons: Record<string, CustomButton[]>;
+  buttons: CustomButtonMap;
 };
 
-const DEFAULT_CTX: Ctx = {
+const SiteTextContext = createContext<Ctx>({
   texts: TEXT_DEFAULTS,
   styles: {},
   images: {},
@@ -25,9 +34,8 @@ const DEFAULT_CTX: Ctx = {
   maintenance: MAINTENANCE_DEFAULT,
   pageVisibility: {},
   buttons: {},
-};
+});
 
-const SiteTextContext = createContext<Ctx>(DEFAULT_CTX);
 
 export function styleToCss(s: TextStyle | undefined): CSSProperties {
   if (!s) return {};
@@ -48,11 +56,39 @@ export function styleToCss(s: TextStyle | undefined): CSSProperties {
 }
 
 export function SiteTextProvider({ children }: { children: ReactNode }) {
-  const { fontDisplay, fontBody, scale } = DEFAULT_CTX.typography;
+  const { data } = useQuery(siteTextsQuery);
+
+  const value = useMemo<Ctx>(() => {
+    const texts: Record<string, string> = { ...TEXT_DEFAULTS };
+    const styles: Record<string, TextStyle> = {};
+    const images: Record<string, string> = {};
+    for (const row of data?.texts ?? []) {
+      const id = `${row.pageSlug}.${row.textKey}`;
+      if (row.value?.trim()) texts[id] = row.value;
+      if (row.style && Object.keys(row.style).length) styles[id] = row.style;
+    }
+    for (const row of data?.images ?? []) {
+      if (row.url) images[`${row.pageSlug}.${row.imageKey}`] = row.url;
+    }
+    const typography: Typography = { ...TYPOGRAPHY_DEFAULT, ...(data?.typography ?? {}) };
+    const maintenance: MaintenanceConfig = { ...MAINTENANCE_DEFAULT, ...(data?.maintenance ?? {}) };
+    return {
+      texts,
+      styles,
+      images,
+      typography,
+      maintenance,
+      pageVisibility: data?.pageVisibility ?? {},
+      buttons: data?.buttons ?? {},
+    };
+
+  }, [data]);
+
+  const { fontDisplay, fontBody, scale } = value.typography;
   const fontsHref = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(fontDisplay).replace(/%20/g, "+")}:wght@400;500;600;700;800&family=${encodeURIComponent(fontBody).replace(/%20/g, "+")}:wght@300;400;500;600;700&display=swap`;
 
   return (
-    <SiteTextContext.Provider value={DEFAULT_CTX}>
+    <SiteTextContext.Provider value={value}>
       <link rel="stylesheet" href={fontsHref} />
       <style
         dangerouslySetInnerHTML={{
@@ -176,3 +212,4 @@ export function CustomTexts({ page }: { page: string }) {
     </section>
   );
 }
+
