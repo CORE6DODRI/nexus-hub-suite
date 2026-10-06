@@ -260,7 +260,7 @@ export default function CmsPage() {
     setSaved(false);
     setValues((p) => ({ ...p, [`${pageSlug}.${key}`]: value }));
   };
-  const setStyle = (key: string, patch: Partial<TextStyle>) => {
+  const setStyle = (key: string, patch: { [K in keyof TextStyle]?: TextStyle[K] | undefined }) => {
     setSaved(false);
     setStyles((p) => ({ ...p, [`${pageSlug}.${key}`]: { ...(p[`${pageSlug}.${key}`] ?? {}), ...patch } }));
   };
@@ -515,7 +515,7 @@ export default function CmsPage() {
     const slug = slugify(newPage.slug || newPage.title);
     if (!title || !slug) return setError("Renseignez un nom et une adresse de page.");
     const max = Math.max(0, ...pageList.map((p) => p.sort_order));
-    const { error: err } = await supabase.from("pages").insert({ slug, title, sort_order: max + 1, status: "published" });
+    const { error: err } = await supabase.from("pages").insert({ slug, title, sort_order: max + 1 });
     if (err) return setError(err.message);
     setNewPage({ title: "", slug: "" });
     setError(null);
@@ -559,7 +559,7 @@ export default function CmsPage() {
     const max = Math.max(0, ...partners.map((p) => p.sort_order));
     const { error: err } = await supabase
       .from("partners")
-      .insert({ name: "Nouveau partenaire", sort_order: max + 1, status: "published" });
+      .insert({ name: "Nouveau partenaire", sort_order: max + 1 });
     if (err) return setError(err.message);
     await reload();
     await queryClient.invalidateQueries({ queryKey: ["partners-public"] });
