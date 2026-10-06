@@ -444,3 +444,16 @@
     animation: none !important;
   }
 }
+
+/* WEBSITE CMS editor (inside CORE) */
+.cms-editor { --brand-violet: #8b3dff; }
+.cms-editor .btn-gradient {
+  background: linear-gradient(135deg, #8b3dff, #2bb8ff);
+  color: #fff;
+}
+.cms-editor .glass {
+  background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.015));
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 1.25rem;
+  backdrop-filter: blur(20px);
+}
