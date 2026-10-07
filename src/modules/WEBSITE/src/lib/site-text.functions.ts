@@ -2,11 +2,12 @@ import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 import type { TextStyle, Typography } from "./site-text";
-import type { CustomButtonMap, MaintenanceConfig, PageVisibility } from "./site-config";
+import { normalizeSiteBranding, type SiteBranding, type CustomButtonMap, type MaintenanceConfig, type PageVisibility } from "./site-config";
 
 export type SiteTextRow = { pageSlug: string; textKey: string; value: string; style: TextStyle };
 export type SiteImageRow = { pageSlug: string; imageKey: string; url: string | null };
 export type SiteContent = {
+  branding: SiteBranding;
   texts: SiteTextRow[];
   images: SiteImageRow[];
   typography: Partial<Typography> | null;
@@ -39,12 +40,13 @@ export const getSiteContent = createServerFn({ method: "GET" }).handler(async ()
     supabase
       .from("site_settings")
       .select("key, value")
-      .in("key", ["typography", "maintenance", "page_visibility", "cms_custom_buttons"]),
+      .in("key", ["typography", "maintenance", "page_visibility", "cms_custom_buttons", "site_branding"]),
   ]);
 
   const settings = new Map((settingsRes.data ?? []).map((r) => [r.key, r.value]));
 
   return {
+    branding: normalizeSiteBranding(settings.get("site_branding") as Partial<SiteBranding> | null),
     texts: (textsRes.data ?? []).map((r) => ({
       pageSlug: r.page_slug,
       textKey: r.text_key,

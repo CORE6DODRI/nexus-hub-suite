@@ -1,12 +1,19 @@
 import { Link } from "@tanstack/react-router";
+import { useSiteConfig } from "@website/lib/site-text-context";
 
 export function Logo({ className = "" }: { className?: string }) {
+  const { branding } = useSiteConfig();
   return (
     <Link
       to="/"
       className={`group flex shrink-0 items-center gap-2.5 ${className}`}
       aria-label="DODRICOM — Accueil"
     >
+      {branding.logoUrl ? (
+        <img src={branding.logoUrl} alt="DODRICOM" height={branding.logoSize}
+          style={{ height: branding.logoSize }}
+          className="site-brand-logo w-auto max-w-full object-contain" />
+      ) : <>
       <span className="relative grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[var(--gradient-brand)] shadow-[0_0_30px_rgba(139,61,255,0.6)] transition-transform duration-300 group-hover:scale-105 xl:h-11 xl:w-11">
         <span className="absolute inset-1 rounded-full border border-white/30" />
         <span className="absolute inset-2.5 rounded-full border border-white/60" />
@@ -20,6 +27,7 @@ export function Logo({ className = "" }: { className?: string }) {
           DOMOTIQUE · DIGITAL · RÉSEAUX · IA
         </span>
       </span>
+      </>}
     </Link>
   );
 }
