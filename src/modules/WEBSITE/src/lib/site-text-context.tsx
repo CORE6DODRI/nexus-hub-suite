@@ -3,6 +3,8 @@ import { queryOptions, useQuery } from "@tanstack/react-query";
 import { getSiteContent } from "./site-text.functions";
 import { TEXT_DEFAULTS, TYPOGRAPHY_DEFAULT, type TextStyle, type Typography } from "./site-text";
 import {
+  SITE_BRANDING_DEFAULT,
+  type SiteBranding,
   MAINTENANCE_DEFAULT,
   type CustomButton,
   type CustomButtonMap,
@@ -17,6 +19,7 @@ export const siteTextsQuery = queryOptions({
 });
 
 type Ctx = {
+  branding: SiteBranding;
   texts: Record<string, string>;
   styles: Record<string, TextStyle>;
   images: Record<string, string>;
@@ -27,6 +30,7 @@ type Ctx = {
 };
 
 const SiteTextContext = createContext<Ctx>({
+  branding: SITE_BRANDING_DEFAULT,
   texts: TEXT_DEFAULTS,
   styles: {},
   images: {},
@@ -73,6 +77,7 @@ export function SiteTextProvider({ children }: { children: ReactNode }) {
     const typography: Typography = { ...TYPOGRAPHY_DEFAULT, ...(data?.typography ?? {}) };
     const maintenance: MaintenanceConfig = { ...MAINTENANCE_DEFAULT, ...(data?.maintenance ?? {}) };
     return {
+      branding: data?.branding ?? SITE_BRANDING_DEFAULT,
       texts,
       styles,
       images,
@@ -157,8 +162,8 @@ export function useCustomTexts(pageSlug: string) {
 
 /** Réglages globaux (maintenance, visibilité des pages, boutons). */
 export function useSiteConfig() {
-  const { maintenance, pageVisibility, buttons } = useContext(SiteTextContext);
-  return { maintenance, pageVisibility, buttons };
+  const { maintenance, pageVisibility, buttons, branding } = useContext(SiteTextContext);
+  return { maintenance, pageVisibility, buttons, branding };
 }
 
 /** Une page est visible tant qu'elle n'a pas été explicitement masquée dans le CMS. */
